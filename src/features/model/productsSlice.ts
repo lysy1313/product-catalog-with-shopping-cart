@@ -204,7 +204,7 @@ export const fetchProductsByCategoryTC = createAsyncThunk(
       return response;
     } catch (error) {
       dispatch(setAppStatusAC({ status: "failed" }));
-      dispatch(setAppErrorAC({ error: error as string }));
+      dispatch(setAppErrorAC({ error: JSON.stringify(error) }));
       return rejectWithValue(error);
     }
   },

@@ -1,11 +1,10 @@
-import { Header } from "../common/components/Header/Header";
-import { Main } from "../features/ui/Main/Main";
-import "../common/style/global.scss";
-import { AppRoutes } from "../common/components/Routes/AppRoutes";
-import { useEffect } from "react";
-import { useAppDispatch } from "../common/hooks";
-import { fetchProductsTC } from "../features/model/productsSlice";
 import { Toast } from "@/common/components";
+import { useEffect } from "react";
+import { Header } from "../common/components/Header/Header";
+import { AppRoutes } from "../common/components/Routes/AppRoutes";
+import { useAppDispatch } from "../common/hooks";
+import "../common/style/global.scss";
+import { fetchProductsTC } from "../features/model/productsSlice";
 
 function App() {
   const dispatch = useAppDispatch();

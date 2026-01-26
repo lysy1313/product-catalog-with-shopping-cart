@@ -1,9 +1,8 @@
-import React from "react";
-import { Link, Navigate, useParams } from "react-router";
-import styles from "./Product.module.scss";
+import { AddButton, Container } from "@/common/components";
 import { useAppSelector } from "@/common/hooks";
 import { selectAllProducts } from "@/features/model/productsSlice";
-import { AddButton, Button, Container } from "@/common/components";
+import { Link, Navigate, useParams } from "react-router";
+import styles from "./Product.module.scss";
 
 type ProductParams = {
   id: string;

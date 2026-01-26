@@ -23,6 +23,11 @@
     color: white;
     border-left: 6px solid #059669;
   }
+  &.error {
+    background: #b91010;
+    color: white;
+    border-left: 6px solid #960505;
+  }
 
   .content {
     display: flex;

@@ -1,8 +1,8 @@
-import React, { useState, type MouseEvent } from "react";
-import { Link } from "react-router";
-import styles from "./ProductItem.module.scss";
 import { AddButton } from "@/common/components";
 import type { Product } from "@/features/model/productsSlice.types";
+import React, { useState } from "react";
+import { Link } from "react-router";
+import styles from "./ProductItem.module.scss";
 
 type ProductItemType = {
   item: Product;

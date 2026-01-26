@@ -97,9 +97,4 @@
 
 svg {
   stroke: $textColor;
-
-  @media (max-width: 480px) {
-    width: 18px;
-    height: 18px;
-  }
 }

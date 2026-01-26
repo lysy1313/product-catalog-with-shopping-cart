@@ -56,7 +56,7 @@ export const ProductsToolbar: React.FC = () => {
         className={styles.search}
         name="search"
         type="text"
-        placeholder="Поиск по названию..."
+        placeholder="Search by name..."
         value={nameForSearch}
         onChange={(e) => setNameForSearch(e.currentTarget.value)}
       />

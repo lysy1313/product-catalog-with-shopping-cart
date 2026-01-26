@@ -1,4 +1,4 @@
-import React, { type MouseEvent, type ReactNode } from "react";
+import { type MouseEvent, type ReactNode } from "react";
 import styles from "./Button.module.scss";
 
 type ButtonPropsType = {

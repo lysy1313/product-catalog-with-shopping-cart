@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { Product } from "./productsSlice.types";
+
 export type ItemType = Product & { quantity: number };
+
 export type ShoppingCartType = {
   items: ItemType[];
   totalPrice: number;
@@ -15,8 +17,12 @@ const loadStateFromLS = (): ShoppingCartType => {
     };
   }
 
-  const parsed = JSON.parse(state);
-  if (typeof parsed !== "object" || parsed === null) {
+  const parsed = JSON.parse(state) as ShoppingCartType;
+  if (
+    typeof parsed !== "object" ||
+    parsed === null ||
+    parsed.items.length === 0
+  ) {
     localStorage.removeItem("shopping-cart");
 
     return {
