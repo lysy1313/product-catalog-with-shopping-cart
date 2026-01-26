@@ -1,0 +1,132 @@
+@use "../../../common/style/variebles.scss" as *;
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 20px;
+  margin-bottom: 30px;
+  padding: 12px 24px;
+  color: $textColor;
+  text-decoration: none;
+  font-weight: 500;
+  background: $cartBgColor;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    background: #f8f9fa44;
+  }
+
+  &::before {
+    content: "←";
+    font-size: 18px;
+  }
+}
+
+.shoppingCart {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 20px $boxShadowColor;
+}
+
+.checkoutAllCart {
+  max-width: 900px;
+  width: 100%;
+
+  & :not(:first-child) {
+    margin-top: 10px;
+  }
+
+  &.emptyList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+}
+.cart {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  position: relative;
+
+  box-shadow: 0 10px 20px $boxShadowColor;
+}
+
+.cartImage {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+.infoCart {
+  // flex-grow: 3;
+}
+.infoPrice {
+  // flex-grow: 6;
+}
+
+.checkout {
+  width: 250px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 0 20px $boxShadowColor;
+  border: 1px solid $textColor;
+}
+
+.totalAmount {
+  font-size: 20px;
+}
+.deleteBtn {
+  position: absolute;
+  background-color: transparent;
+  top: 0;
+  right: 10px;
+  cursor: pointer;
+
+  & :hover {
+    fill: #9b9b9b;
+  }
+}
+
+@media (max-width: 1264px) {
+  .checkoutAllCart {
+    max-width: 1264px;
+  }
+  .checkout {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .cart {
+    flex-wrap: wrap;
+  }
+
+  .boxImage {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .infoPrice {
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -1,0 +1,19 @@
+@use "./variebles.scss" as *;
+
+body {
+  background-color: $bgcColor;
+  color: $textColor;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+svg {
+  background-color: transparent;
+  fill: $textColor;
+}
+
+section {
+  margin-top: 100px;
+}

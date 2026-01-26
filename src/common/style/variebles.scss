@@ -1,0 +1,21 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #4361ee;
+  --box-shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+:root.dark {
+  --bg-color: #242424;
+  --text-color: #f8f9fa;
+  --primary-color: #4cc9f0;
+  --box-shadow-color: rgba(255, 255, 255, 0.2);
+}
+
+$primaryColor: var(--primary-color);
+$textColor: var(--text-color);
+$bgcColor: var(--bg-color);
+$cartBgColor: var(--card-bg);
+
+$btnColor: var(--btn-color);
+$boxShadowColor: var(--box-shadow-color);
