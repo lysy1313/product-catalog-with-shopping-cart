@@ -17,7 +17,7 @@ export const ProductItem: React.FC<ProductItemType> = ({
   const onMouseEnter = () => setIsHover(true);
 
   return (
-    <Link to={`/catalog/${item.id}`}>
+    <Link to={`/product-catalog-with-shopping-cart/catalog/${item.id}`}>
       <div
         className={styles.cart}
         onMouseEnter={onMouseEnter}

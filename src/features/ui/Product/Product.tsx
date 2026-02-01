@@ -13,7 +13,9 @@ export const Product = () => {
   const { id } = useParams<ProductParams>();
 
   if (!id) {
-    return <Navigate to="/catalog" replace />;
+    return (
+      <Navigate to="/product-catalog-with-shopping-cart/catalog" replace />
+    );
   }
 
   const product = allProducts.find((el) => el.id === +id);
@@ -31,7 +33,10 @@ export const Product = () => {
   return (
     <section className={styles.infoAboutProduts}>
       <Container>
-        <Link to="/catalog" className={styles.link}>
+        <Link
+          to="/product-catalog-with-shopping-cart/catalog"
+          className={styles.link}
+        >
           Назад в каталог
         </Link>
 

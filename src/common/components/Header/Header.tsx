@@ -15,12 +15,17 @@ export const Header: React.FC = () => {
     <header className={styles.header}>
       <Container>
         <div className={styles.boxItem}>
-          <h1 onClick={() => navigate("/catalog")} className={styles.title}>
+          <h1
+            onClick={() =>
+              navigate("/product-catalog-with-shopping-cart/catalog")
+            }
+            className={styles.title}
+          >
             Shop
           </h1>
           <div className={styles.btnBox}>
             <ThemeMode />
-            <Link to="/basket">
+            <Link to="/product-catalog-with-shopping-cart/basket">
               <Icon
                 iconId="basket"
                 width="30"

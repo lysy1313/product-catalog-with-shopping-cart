@@ -28,7 +28,10 @@ export const ShoppingCart: React.FC = () => {
           <div className={`${styles.checkoutAllCart} ${styles.emptyList}`}>
             You haven't added any products yet! We suggest you return to the
             catalog and do so!
-            <Link to="/catalog" className={styles.link}>
+            <Link
+              to="/product-catalog-with-shopping-cart/catalog"
+              className={styles.link}
+            >
               Back to catalog
             </Link>
           </div>
@@ -44,7 +47,10 @@ export const ShoppingCart: React.FC = () => {
   ) : (
     <section>
       <Container>
-        <Link to="/catalog" className={styles.link}>
+        <Link
+          to="/product-catalog-with-shopping-cart/catalog"
+          className={styles.link}
+        >
           Back to catalog
         </Link>
         <h2>ShoppingCart</h2>
