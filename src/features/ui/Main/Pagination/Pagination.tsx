@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
 import { selectPagination, setPage } from "../../../model/productsSlice";
 import styles from "./Pagination.module.scss";
@@ -16,7 +16,7 @@ export const Pagination: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const getPageNumbers = () => {
+  const getPageNumbers = useMemo(() => {
     const pages = [];
     const maxVisible = 5;
 
@@ -32,7 +32,7 @@ export const Pagination: React.FC = () => {
     }
 
     return pages;
-  };
+  }, [currentPage, totalPages]);
 
   return (
     <div className={styles.pagination}>
@@ -42,7 +42,7 @@ export const Pagination: React.FC = () => {
       </div>
 
       <div className={styles.controls}>
-        {getPageNumbers().map((page) => (
+        {getPageNumbers.map((page) => (
           <button
             key={page}
             className={`${styles.pageButton} ${currentPage === page ? styles.active : ""}`}

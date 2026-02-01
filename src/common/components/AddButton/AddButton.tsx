@@ -7,7 +7,7 @@ import {
   deleteItem,
   selectItemsInShoppingCart,
 } from "@/features/model/shoppingCartSlice";
-import React, { type MouseEvent } from "react";
+import React, { useCallback, type MouseEvent } from "react";
 import { Button } from "../Button/Button";
 import styles from "./AddButton.module.scss";
 
@@ -22,28 +22,37 @@ export const AddButton: React.FC<PropsType> = ({ product }) => {
 
   const dispatch = useAppDispatch();
 
-  const addItemInShoppingCart = (e?: MouseEvent<HTMLButtonElement>) => {
-    e?.stopPropagation();
-    e?.preventDefault();
-    if (item) {
-      dispatch(addItem({ id: product.id }));
-    } else {
-      dispatch(addNewItem({ item: product }));
-    }
-    dispatch(setAppToast({ message: "Добавлено в корзину!", isVisible: true }));
-  };
+  const addItemInShoppingCart = useCallback(
+    (e?: MouseEvent<HTMLButtonElement>) => {
+      e?.stopPropagation();
+      e?.preventDefault();
 
-  const deleteItemFromShoppingCart = (e?: MouseEvent<HTMLButtonElement>) => {
-    e?.stopPropagation();
-    e?.preventDefault();
-    dispatch(deleteItem({ id: product.id }));
-  };
+      if (item) {
+        dispatch(addItem({ id: product.id }));
+      } else {
+        dispatch(addNewItem({ item: product }));
+      }
 
-  const stopPropagation = (e: MouseEvent<HTMLButtonElement>) => {
-    e?.stopPropagation();
-    e?.preventDefault();
-    return;
-  };
+      dispatch(
+        setAppToast({ message: "Добавлено в корзину!", isVisible: true }),
+      );
+    },
+    [dispatch, item, product],
+  );
+
+  const deleteItemFromShoppingCart = useCallback(
+    (e?: MouseEvent<HTMLButtonElement>) => {
+      e?.stopPropagation();
+      e?.preventDefault();
+      dispatch(deleteItem({ id: product.id }));
+    },
+    [dispatch, product.id],
+  );
+
+  const stopPropagation = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+  }, []);
 
   return !item ? (
     <Button

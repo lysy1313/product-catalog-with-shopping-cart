@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../common/hooks";
 import { useDebounce } from "../../../../common/hooks/useDebounce";
 import {
@@ -50,6 +50,27 @@ export const ProductsToolbar: React.FC = () => {
     dispatch(setSearch({ search: debouncedSearch }));
   }, [debouncedSearch, dispatch]);
 
+  const handleCategoryChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setCategoryValue(e.currentTarget.value as UIFilterCategoryType);
+    },
+    [],
+  );
+
+  const handleSortChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSortBy(e.currentTarget.value as SortType);
+    },
+    [],
+  );
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNameForSearch(e.currentTarget.value);
+    },
+    [],
+  );
+
   return (
     <section className={styles.toolbar}>
       <input
@@ -58,39 +79,31 @@ export const ProductsToolbar: React.FC = () => {
         type="text"
         placeholder="Search by name..."
         value={nameForSearch}
-        onChange={(e) => setNameForSearch(e.currentTarget.value)}
+        onChange={handleSearchChange}
       />
       <select
         className={styles.select}
         name="categories"
         value={categoryValue}
-        onChange={(e) => {
-          setCategoryValue(e.currentTarget.value as UIFilterCategoryType);
-        }}
+        onChange={handleCategoryChange}
       >
-        {productsCategories.map((el, i) => {
-          return (
-            <option key={i} value={el}>
-              {el}
-            </option>
-          );
-        })}
+        {productsCategories.map((el, i) => (
+          <option key={i} value={el}>
+            {el}
+          </option>
+        ))}
       </select>
       <select
         className={styles.select}
         name="sorting"
         value={sortBy}
-        onChange={(e) => {
-          setSortBy(e.currentTarget.value as SortType);
-        }}
+        onChange={handleSortChange}
       >
-        {allSort.map((el, i) => {
-          return (
-            <option key={i} value={el}>
-              {el}
-            </option>
-          );
-        })}
+        {allSort.map((el, i) => (
+          <option key={i} value={el}>
+            {el}
+          </option>
+        ))}
       </select>
     </section>
   );

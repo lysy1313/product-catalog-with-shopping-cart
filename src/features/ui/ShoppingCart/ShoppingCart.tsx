@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styles from "./ShoppingCart.module.scss";
 
 import { Link } from "react-router";
@@ -16,11 +16,16 @@ export const ShoppingCart: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const deleteItemFromShoppingCart = (id: number) => {
-    dispatch(fullDeleteItem({ id }));
-  };
+  const deleteItemFromShoppingCart = useCallback(
+    (id: number) => {
+      dispatch(fullDeleteItem({ id }));
+    },
+    [dispatch],
+  );
 
-  return shoppingCartItems.length === 0 ? (
+  const isEmpty = shoppingCartItems.length === 0;
+
+  return isEmpty ? (
     <section>
       <Container>
         <h2>ShoppingCart</h2>
@@ -58,7 +63,7 @@ export const ShoppingCart: React.FC = () => {
           <div className={styles.checkoutAllCart}>
             {shoppingCartItems.map((item) => {
               return (
-                <div className={styles.cart}>
+                <div key={item.id} className={styles.cart}>
                   <div className={styles.boxImage}>
                     <img
                       src={item.image}
