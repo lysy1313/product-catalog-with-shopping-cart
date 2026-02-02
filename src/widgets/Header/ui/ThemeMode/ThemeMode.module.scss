@@ -1,0 +1,26 @@
+@use "../../../../app/styles/variebles.scss" as *;
+.themeMode {
+  margin: 0 10px;
+  width: 25px;
+  height: 10px;
+  border-radius: 20px;
+  background-color: $textColor;
+  position: relative;
+}
+
+.switchDark {
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  border: 1px solid $bgcColor;
+  background-color: $textColor;
+  cursor: pointer;
+
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  transition: transform 0.3s ease;
+}
+.switchLigth {
+  transform: translateX(15px);
+}

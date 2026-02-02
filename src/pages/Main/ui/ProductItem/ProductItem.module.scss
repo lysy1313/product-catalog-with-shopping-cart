@@ -1,0 +1,197 @@
+@use "../../../../app/styles/variebles.scss" as *;
+
+.cart {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 280px;
+  min-height: 420px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: $cartBgColor;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  // Автоматическая адаптация под разные экраны
+  @media (min-width: 1200px) {
+    max-width: 300px;
+    min-height: 450px;
+  }
+
+  @media (max-width: 992px) {
+    max-width: 240px;
+    min-height: 380px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 200px;
+    min-height: 340px;
+  }
+
+  @media (max-width: 576px) {
+    max-width: 100%;
+    min-height: auto;
+    aspect-ratio: 3/4;
+  }
+
+  @media (max-width: 480px) {
+    border-radius: 10px;
+    aspect-ratio: 3/4.5;
+  }
+}
+
+.imageContainer {
+  width: 100%;
+  height: 200px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  flex-shrink: 0;
+
+  @media (max-width: 1200px) {
+    height: 180px;
+    padding: 12px;
+  }
+
+  @media (max-width: 768px) {
+    height: 160px;
+  }
+
+  @media (max-width: 576px) {
+    height: 50%;
+    padding: 10px;
+  }
+
+  @media (max-width: 480px) {
+    height: 45%;
+  }
+}
+
+.imgCart {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-height: 100%;
+  transition: transform 0.3s ease;
+
+  .cart:hover & {
+    transform: scale(1.05);
+  }
+}
+
+.productInfo {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+
+  @media (max-width: 992px) {
+    padding: 16px;
+    gap: 10px;
+  }
+
+  @media (max-width: 576px) {
+    padding: 12px;
+    gap: 8px;
+  }
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: $textColor;
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 44px;
+
+  @media (max-width: 992px) {
+    font-size: 15px;
+    min-height: 42px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    min-height: 40px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 36px;
+  }
+}
+
+.priceSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: 700;
+  color: $textColor;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 15px;
+  }
+}
+
+.badge {
+  background: #00b894;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+
+  &.red {
+    background: #b81500;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+    padding: 3px 8px;
+  }
+}
+
+.description {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #636e72;
+  margin: 0;
+  overflow: hidden;
+
+  @media (max-width: 992px) {
+    font-size: 15px;
+    -webkit-line-clamp: 2;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 15px;
+  }
+}
+
+.addButtonContainer {
+  margin: 0 auto;
+}

@@ -2,8 +2,8 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { HashRouter } from "react-router";
 import App from "./app/App.tsx";
-import { store } from "./app/store.ts";
 import "./index.css";
+import { store } from "./app/providers/store/store.ts";
 
 createRoot(document.getElementById("root")!).render(
   <HashRouter>

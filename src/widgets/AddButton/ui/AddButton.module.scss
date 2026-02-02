@@ -1,0 +1,37 @@
+@use "../../../app/styles/variebles.scss" as *;
+
+.boxAddBtn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  align-items: baseline;
+}
+
+.addButton {
+  margin-top: 30px;
+  padding: 15px 20px;
+  background: $bgcColor;
+  color: $textColor;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(12, 12, 12, 0.3);
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 10px 25px rgba(90, 90, 90, 0.596);
+  }
+
+  &:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+.quantity {
+  color: $textColor;
+}

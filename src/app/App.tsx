@@ -1,15 +1,17 @@
-import { Toast } from "@/common/components";
 import { useEffect } from "react";
-import { Header } from "../common/components/Header/Header";
-import { AppRoutes } from "../common/components/Routes/AppRoutes";
-import { useAppDispatch } from "../common/hooks";
-import "../common/style/global.scss";
-import { fetchProductsTC } from "../features/model/productsSlice";
+import { Header } from "../widgets/Header/ui/Header";
+import { AppRoutes } from "./providers/router/AppRoutes";
+import { useAppDispatch } from "../shared/lib/hooks";
+import "./styles/global.scss";
+import { fetchProductsTC } from "../pages/Main/model/productsSlice";
+import { Toast } from "@/shared/ui";
+import { loadFromLocalStorageCart } from "@/pages/ShoppingCart/model/shoppingCartSlice";
 
 function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchProductsTC());
+    dispatch(loadFromLocalStorageCart());
   }, []);
   return (
     <>
