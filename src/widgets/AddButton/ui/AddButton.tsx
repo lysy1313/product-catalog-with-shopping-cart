@@ -1,16 +1,15 @@
 import { setAppToast } from "@/app/model/app-slice";
-import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks";
 import type { Product } from "@/pages/Main/model/productsSlice.types";
-import React, { useCallback, useEffect, type MouseEvent } from "react";
-import { Button } from "../../../shared/ui/Button/Button";
-import styles from "./AddButton.module.scss";
 import {
   addItem,
   addNewItem,
   deleteItem,
-  saveInLocalStorageCart,
   selectItemsInShoppingCart,
 } from "@/pages/ShoppingCart/model/shoppingCartSlice";
+import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks";
+import React, { useCallback, type MouseEvent } from "react";
+import { Button } from "../../../shared/ui/Button/Button";
+import styles from "./AddButton.module.scss";
 
 type PropsType = {
   product: Product;
