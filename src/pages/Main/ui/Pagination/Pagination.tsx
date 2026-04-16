@@ -5,11 +5,17 @@ import { selectPagination, setPage } from "../../model/productsSlice";
 
 export const Pagination: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { currentPage, totalPages, totalItems } =
+  const { currentPage, itemsPerPage, totalPages, totalItems } =
     useAppSelector(selectPagination);
+
+  const shownItems =
+    totalItems === 0
+      ? 0
+      : Math.min(itemsPerPage, totalItems - (currentPage - 1) * itemsPerPage);
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
+
     dispatch(setPage({ page }));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -19,14 +25,14 @@ export const Pagination: React.FC = () => {
     const maxVisible = 5;
 
     let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+    const endPage = Math.min(totalPages, startPage + maxVisible - 1);
 
     if (endPage - startPage + 1 < maxVisible) {
       startPage = Math.max(1, endPage - maxVisible + 1);
     }
 
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
+    for (let page = startPage; page <= endPage; page += 1) {
+      pages.push(page);
     }
 
     return pages;
@@ -35,8 +41,7 @@ export const Pagination: React.FC = () => {
   return (
     <div className={styles.pagination}>
       <div className={styles.info}>
-        Shown: {Math.min(12, totalItems - (currentPage - 1) * 12)} из{" "}
-        {totalItems} products
+        Shown: {shownItems} of {totalItems} products
       </div>
 
       <div className={styles.controls}>

@@ -6,7 +6,7 @@ export type CategoryType =
 export type UIFilterCategoryType = CategoryType | "All";
 
 export type SortType =
-  | "Selected sorting"
+  | "Sort by"
   | "Expensive"
   | "Cheap"
   | "Name A-Z"
@@ -17,9 +17,12 @@ export type FiltersType = {
   sort: SortType;
   search: string;
 };
-export type PaginationDataType = {
+export type PaginationStateType = {
   currentPage: number;
   itemsPerPage: number;
+};
+
+export type PaginationDataType = PaginationStateType & {
   totalPages: number;
   totalItems: number;
 };
@@ -34,7 +37,7 @@ export type ProductFromServer = {
   title: string;
   price: number;
   description: string;
-  category: string;
+  category: CategoryType;
   image: string;
   rating: Rating;
 };

@@ -17,12 +17,12 @@
   font-weight: 500;
   background: $cartBgColor;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px $boxShadowColor;
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    background: #f8f9fa44;
+    box-shadow: 0 6px 20px $boxShadowColor;
+    background: $surfaceOverlayColor;
   }
 
   &::before {
@@ -37,10 +37,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 40px;
-  border: 1px solid rgba($textColor, 0.1);
+  border: 1px solid $borderColor;
   border-radius: 20px;
   padding: 40px;
-  background: $bgcColor;
+  background: $surfaceColor;
   box-shadow: 0 10px 20px $boxShadowColor;
   position: relative;
   overflow: hidden;
@@ -51,9 +51,9 @@
   height: 500px;
   object-fit: contain;
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px $boxShadowColor;
   transition: transform 0.5s ease;
-  background: $textColor;
+  background: $surfaceMutedColor;
   padding: 20px;
 
   &:hover {
@@ -86,15 +86,15 @@
     right: 0;
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, transparent, $bgcColor);
+    background: linear-gradient(90deg, transparent, $primaryColor);
     border-radius: 2px;
   }
 }
 
 .productCategory {
   padding: 8px 20px;
-  background: rgba(102, 126, 234, 0.1);
-  color: #5d73d8;
+  background: $surfaceMutedColor;
+  color: $primaryColor;
   border-radius: 50px;
   font-size: 14px;
   font-weight: 600;
@@ -108,38 +108,31 @@
   display: flex;
   align-items: center;
   gap: 30px;
-  background: $textColor;
+  background: $surfaceMutedColor;
   padding: 20px 30px;
   border-radius: 12px;
-  border: 1px solid $boxShadowColor;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid $borderColor;
+  box-shadow: 0 4px 12px $boxShadowColor;
 }
 
 .productPrice {
   font-size: 36px;
   font-weight: 800;
-  color: $bgcColor;
+  color: $textColor;
   position: relative;
-
-  &::before {
-    content: "$";
-    font-size: 24px;
-    color: #667eea;
-    font-weight: 600;
-    margin-right: 4px;
-  }
 }
 
 .productStockBadge {
   padding: 10px 24px;
-  background: linear-gradient(135deg, #4ade80, #22c55e);
-  color: $textColor;
+  background: $successBgColor;
+  color: $successContrastColor;
   border-radius: 50px;
   font-weight: 600;
   font-size: 14px;
 
   &.outOfStock {
-    background: linear-gradient(135deg, #f87171, #ef4444);
+    background: $dangerBgColor;
+    color: $dangerContrastColor;
   }
 }
 
@@ -151,8 +144,8 @@
   padding: 25px;
   background: $bgcColor;
   border-radius: 12px;
-  border-left: 4px solid $textColor;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid $primaryColor;
+  box-shadow: 0 4px 12px $boxShadowColor;
 }
 
 @media (max-width: 1024px) {

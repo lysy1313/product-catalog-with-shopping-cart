@@ -1,9 +1,11 @@
-import { useAppSelector } from "@/shared/lib/hooks";
+import { selectError, selectStatus } from "@/app/model/app-slice";
+import { routePaths } from "@/app/providers/router/routes";
 import { selectAllProducts } from "@/pages/Main/model/productsSlice";
-import { Link, Navigate, useParams } from "react-router";
-import styles from "./Product.module.scss";
+import { useAppSelector } from "@/shared/lib/hooks";
 import { Container } from "@/shared/ui";
 import { AddButton } from "@/widgets/AddButton/ui/AddButton";
+import { Link, Navigate, useParams } from "react-router";
+import styles from "./Product.module.scss";
 
 type ProductParams = {
   id: string;
@@ -11,20 +13,54 @@ type ProductParams = {
 
 export const Product = () => {
   const allProducts = useAppSelector(selectAllProducts);
+  const status = useAppSelector(selectStatus);
+  const error = useAppSelector(selectError);
   const { id } = useParams<ProductParams>();
 
   if (!id) {
+    return <Navigate to={routePaths.catalog} replace />;
+  }
+
+  const productId = Number(id);
+  const isValidProductId = Number.isInteger(productId) && productId > 0;
+  const product = isValidProductId
+    ? allProducts.find((item) => item.id === productId)
+    : undefined;
+  const isInitialLoad = allProducts.length === 0 && status !== "succeeded";
+
+  if (isInitialLoad) {
     return (
-      <Navigate to="/product-catalog-with-shopping-cart/catalog" replace />
+      <section className={styles.infoAboutProducts}>
+        <Container>
+          <Link to={routePaths.catalog} className={styles.link}>
+            Back to catalog
+          </Link>
+          <div>Loading product...</div>
+        </Container>
+      </section>
     );
   }
 
-  const product = allProducts.find((el) => el.id === +id);
+  if (status === "failed" && allProducts.length === 0) {
+    return (
+      <section className={styles.infoAboutProducts}>
+        <Container>
+          <Link to={routePaths.catalog} className={styles.link}>
+            Back to catalog
+          </Link>
+          <div>{error ?? "Unable to load product details."}</div>
+        </Container>
+      </section>
+    );
+  }
 
   if (!product) {
     return (
       <section className={styles.infoAboutProducts}>
         <Container>
+          <Link to={routePaths.catalog} className={styles.link}>
+            Back to catalog
+          </Link>
           <div>Product not found</div>
         </Container>
       </section>
@@ -34,10 +70,7 @@ export const Product = () => {
   return (
     <section className={styles.infoAboutProducts}>
       <Container>
-        <Link
-          to="/product-catalog-with-shopping-cart/catalog"
-          className={styles.link}
-        >
+        <Link to={routePaths.catalog} className={styles.link}>
           Back to catalog
         </Link>
 
@@ -54,9 +87,7 @@ export const Product = () => {
             <h4 className={styles.productCategory}>{product.category}</h4>
 
             <div className={styles.productPriceSection}>
-              <span className={styles.productPrice}>
-                {product.price.toFixed(2)}
-              </span>
+              <span className={styles.productPrice}>${product.price.toFixed(2)}</span>
               <span
                 className={`${styles.productStockBadge} ${product.stock === 0 ? styles.outOfStock : ""}`}
               >

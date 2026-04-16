@@ -1,28 +1,24 @@
-import { useEffect } from "react";
 import { selectStatus } from "../../../app/model/app-slice";
 
 import styles from "./Main.module.scss";
 import { Pagination } from "./Pagination/Pagination";
 import { ProductItem } from "./ProductItem/ProductItem";
 import { ProductsToolbar } from "./ProductsToolbar/ProductsToolbar";
-import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks";
+import { useAppSelector } from "@/shared/lib/hooks";
 import {
-  fetchProductsByCategoryTC,
+  selectAllProducts,
   selectFilters,
   selectProducts,
+  selectTotalItems,
 } from "../model/productsSlice";
 import { Container, Skeleton } from "@/shared/ui";
 
 export const Main: React.FC = () => {
-  const filteredProducts = useAppSelector(selectProducts);
-  const filters = useAppSelector(selectFilters);
+  const visibleProducts = useAppSelector(selectProducts);
+  const allProducts = useAppSelector(selectAllProducts);
   const status = useAppSelector(selectStatus);
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchProductsByCategoryTC({ category: filters.category }));
-  }, [filters.category, filters.search]);
+  const filters = useAppSelector(selectFilters);
+  const totalItems = useAppSelector(selectTotalItems);
 
   if (status === "loading") {
     return (
@@ -34,16 +30,21 @@ export const Main: React.FC = () => {
       </main>
     );
   }
-  if (
-    (filteredProducts.length === 0 && status === "idle") ||
-    filteredProducts.length === 0
-  ) {
+
+  if (visibleProducts.length === 0) {
+    const emptyMessage =
+      allProducts.length === 0
+        ? "No products available right now."
+        : `No products match your current filters${
+            filters.search ? ` for "${filters.search}"` : ""
+          }.`;
+
     return (
       <main className={styles.main}>
         <Container>
           <ProductsToolbar />
           <div style={{ textAlign: "center", margin: "40vh auto" }}>
-            No products available or undefined
+            {emptyMessage}
           </div>
         </Container>
       </main>
@@ -55,11 +56,11 @@ export const Main: React.FC = () => {
       <Container>
         <ProductsToolbar />
         <div className={styles.wrapper}>
-          {filteredProducts?.map((el) => {
+          {visibleProducts.map((el) => {
             return <ProductItem key={el.id} item={el} />;
           })}
         </div>
-        <Pagination />
+        {totalItems > 0 && <Pagination />}
       </Container>
     </main>
   );

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "types": ["node"],
+    "lib": ["ES2023"],
+    "strict": true,
+    "skipLibCheck": true,
+    "outDir": ".test-dist",
+    "rootDir": "src/pages/Main/model"
+  },
+  "include": ["src/pages/Main/model/products.utils.ts", "src/pages/Main/model/productsSlice.types.ts", "src/pages/Main/model/products.utils.test.ts"]
+}

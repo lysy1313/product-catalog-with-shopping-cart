@@ -20,7 +20,7 @@ import type {
 } from "../../model/productsSlice.types";
 
 const allSort = [
-  "Selected sorting",
+  "Sort by",
   "Expensive",
   "Cheap",
   "Name A-Z",
@@ -29,43 +29,36 @@ const allSort = [
 
 export const ProductsToolbar: React.FC = () => {
   const productsCategories = useAppSelector(selectAvailableCategories);
-
   const filters = useAppSelector(selectFilters);
-  const [categoryValue, setCategoryValue] = useState<UIFilterCategoryType>(
-    filters.category,
-  );
-  const [sortBy, setSortBy] = useState<SortType>(filters.sort);
-  const [nameForSearch, setNameForSearch] = useState<string>("");
+  const [nameForSearch, setNameForSearch] = useState<string>(filters.search);
   const debouncedSearch = useDebounce(nameForSearch, 500);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchProductsCategoriesTC());
-  }, []);
+  }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(changeCategory({ category: categoryValue }));
-  }, [categoryValue, dispatch]);
-  useEffect(() => {
-    dispatch(changeSorting({ sortBy }));
-  }, [sortBy, dispatch]);
   useEffect(() => {
     dispatch(setSearch({ search: debouncedSearch }));
   }, [debouncedSearch, dispatch]);
 
   const handleCategoryChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setCategoryValue(e.currentTarget.value as UIFilterCategoryType);
+      dispatch(
+        changeCategory({
+          category: e.currentTarget.value as UIFilterCategoryType,
+        }),
+      );
     },
-    [],
+    [dispatch],
   );
 
   const handleSortChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setSortBy(e.currentTarget.value as SortType);
+      dispatch(changeSorting({ sortBy: e.currentTarget.value as SortType }));
     },
-    [],
+    [dispatch],
   );
 
   const handleSearchChange = useCallback(
@@ -81,18 +74,18 @@ export const ProductsToolbar: React.FC = () => {
         className={styles.search}
         name="search"
         type="text"
-        placeholder="Search by name..."
+        placeholder="Search products"
         value={nameForSearch}
         onChange={handleSearchChange}
       />
       <select
         className={styles.select}
         name="categories"
-        value={categoryValue}
+        value={filters.category}
         onChange={handleCategoryChange}
       >
-        {productsCategories.map((el, i) => (
-          <option key={i} value={el}>
+        {productsCategories.map((el) => (
+          <option key={el} value={el}>
             {el}
           </option>
         ))}
@@ -100,11 +93,11 @@ export const ProductsToolbar: React.FC = () => {
       <select
         className={styles.select}
         name="sorting"
-        value={sortBy}
+        value={filters.sort}
         onChange={handleSortChange}
       >
-        {allSort.map((el, i) => (
-          <option key={i} value={el}>
+        {allSort.map((el) => (
+          <option key={el} value={el}>
             {el}
           </option>
         ))}

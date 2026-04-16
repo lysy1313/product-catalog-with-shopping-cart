@@ -12,12 +12,12 @@
   font-weight: 500;
   background: $cartBgColor;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px $boxShadowColor;
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    background: #f8f9fa44;
+    box-shadow: 0 6px 20px $boxShadowColor;
+    background: $surfaceOverlayColor;
   }
 
   &::before {
@@ -61,6 +61,7 @@
   gap: 10px;
   border-radius: 12px;
   position: relative;
+  background: $cartBgColor;
 
   box-shadow: 0 10px 20px $boxShadowColor;
 }
@@ -86,8 +87,9 @@
   gap: 20px;
   border-radius: 12px;
   padding: 10px;
+  background: $surfaceColor;
   box-shadow: 0 0 20px $boxShadowColor;
-  border: 1px solid $textColor;
+  border: 1px solid $borderColor;
 }
 
 .totalAmount {
@@ -101,7 +103,7 @@
   cursor: pointer;
 
   & :hover {
-    fill: #9b9b9b;
+    fill: $textMutedColor;
   }
 }
 

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router";
 import styles from "./ProductItem.module.scss";
 import { AddButton } from "@/widgets/AddButton/ui/AddButton";
+import { buildProductRoute } from "@/app/providers/router/routes";
 
 type ProductItemType = {
   item: Product;
@@ -17,7 +18,7 @@ export const ProductItem: React.FC<ProductItemType> = ({
   const onMouseEnter = () => setIsHover(true);
 
   return (
-    <Link to={`/product-catalog-with-shopping-cart/catalog/${item.id}`}>
+    <Link to={buildProductRoute(item.id)}>
       <div
         className={styles.cart}
         onMouseEnter={onMouseEnter}

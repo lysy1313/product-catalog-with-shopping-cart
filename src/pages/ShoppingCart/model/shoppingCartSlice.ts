@@ -1,11 +1,5 @@
-import { setAppErrorAC, setAppStatusAC } from "@/app/model/app-slice";
-import type { RootState } from "@/app/providers/store/store";
 import type { Product } from "@/pages/Main/model/productsSlice.types";
-import {
-  createAsyncThunk,
-  createSlice,
-  type PayloadAction,
-} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export type ItemType = Product & { quantity: number };
 
@@ -14,120 +8,174 @@ export type ShoppingCartType = {
   totalPrice: number;
 };
 
+const SHOPPING_CART_STORAGE_KEY = "shopping-cart";
+
+const emptyCartState = (): ShoppingCartType => ({
+  items: [],
+  totalPrice: 0,
+});
+
+const roundCurrency = (value: number) => Number(value.toFixed(2));
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null;
+
+const isFiniteNumber = (value: unknown): value is number =>
+  typeof value === "number" && Number.isFinite(value);
+
+const isValidRating = (value: unknown): value is Product["rating"] =>
+  isRecord(value) &&
+  isFiniteNumber(value.rate) &&
+  isFiniteNumber(value.count) &&
+  value.count >= 0;
+
+const isValidCartItem = (value: unknown): value is ItemType =>
+  isRecord(value) &&
+  isFiniteNumber(value.id) &&
+  typeof value.title === "string" &&
+  isFiniteNumber(value.price) &&
+  typeof value.description === "string" &&
+  typeof value.category === "string" &&
+  typeof value.image === "string" &&
+  isValidRating(value.rating) &&
+  isFiniteNumber(value.stock) &&
+  Number.isInteger(value.stock) &&
+  value.stock >= 0 &&
+  isFiniteNumber(value.quantity) &&
+  Number.isInteger(value.quantity) &&
+  value.quantity > 0 &&
+  value.quantity <= Math.max(value.stock, 1);
+
+const calculateTotalPrice = (items: ItemType[]) =>
+  roundCurrency(
+    items.reduce((total, item) => total + item.price * item.quantity, 0),
+  );
+
+const sanitizeCartState = (value: unknown): ShoppingCartType => {
+  if (!isRecord(value) || !Array.isArray(value.items)) {
+    return emptyCartState();
+  }
+
+  const items = value.items.filter(isValidCartItem);
+
+  return {
+    items,
+    totalPrice: calculateTotalPrice(items),
+  };
+};
+
+const loadShoppingCartFromLocalStorage = (): ShoppingCartType => {
+  if (typeof window === "undefined") {
+    return emptyCartState();
+  }
+
+  try {
+    const persistedCart = window.localStorage.getItem(
+      SHOPPING_CART_STORAGE_KEY,
+    );
+
+    if (!persistedCart) {
+      return emptyCartState();
+    }
+
+    const sanitizedCart = sanitizeCartState(JSON.parse(persistedCart));
+
+    if (sanitizedCart.items.length === 0) {
+      window.localStorage.removeItem(SHOPPING_CART_STORAGE_KEY);
+      return emptyCartState();
+    }
+
+    return sanitizedCart;
+  } catch {
+    window.localStorage.removeItem(SHOPPING_CART_STORAGE_KEY);
+    return emptyCartState();
+  }
+};
+
+export const saveShoppingCartToLocalStorage = (
+  shoppingCart: ShoppingCartType,
+) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    if (shoppingCart.items.length === 0) {
+      window.localStorage.removeItem(SHOPPING_CART_STORAGE_KEY);
+      return;
+    }
+
+    window.localStorage.setItem(
+      SHOPPING_CART_STORAGE_KEY,
+      JSON.stringify({
+        items: shoppingCart.items,
+        totalPrice: calculateTotalPrice(shoppingCart.items),
+      }),
+    );
+  } catch {
+    // Ignore write failures so cart interactions keep working.
+  }
+};
+
+const syncCartTotals = (state: ShoppingCartType) => {
+  state.totalPrice = calculateTotalPrice(state.items);
+};
+
 export const shoppingCartSlice = createSlice({
   name: "shoppingCartSlice",
-  initialState: {
-    items: [],
-    totalPrice: 0,
-  } as ShoppingCartType,
+  initialState: loadShoppingCartFromLocalStorage(),
   selectors: {
     selectItemsInShoppingCart: (state) => state.items,
     selectTotalPrice: (state) => state.totalPrice,
-    selectTotalQuantityItemInShoppingCart: (state) => state.items.length,
+    selectTotalQuantityItemInShoppingCart: (state) =>
+      state.items.reduce((total, item) => total + item.quantity, 0),
   },
-  reducers: (create) => {
-    return {
-      addNewItem: create.reducer<{ item: Product }>((state, action) => {
-        state.items.push({ ...action.payload.item, quantity: 1 });
-        state.totalPrice += +action.payload.item.price.toFixed(2);
-      }),
-      addItem: create.reducer<{ id: number }>((state, action) => {
-        const index = state.items.findIndex(
-          (el) => el.id === action.payload.id,
-        );
-        if (index !== -1) {
-          state.items[index].quantity += 1;
-          state.totalPrice =
-            +state.totalPrice.toFixed(2) + +state.items[index].price.toFixed(2);
-        }
-      }),
-      deleteItem: create.reducer<{ id: number }>((state, action) => {
-        const index = state.items.findIndex(
-          (el) => el.id === action.payload.id,
-        );
-        if (index !== -1) {
-          state.totalPrice =
-            +state.totalPrice.toFixed(2) - +state.items[index].price.toFixed(2);
-          state.items[index].quantity -= 1;
-          if (state.items[index].quantity === 0) {
-            state.items.splice(index, 1);
-          }
-        }
-      }),
-      fullDeleteItem: create.reducer<{ id: number }>((state, action) => {
-        const index = state.items.findIndex(
-          (el) => el.id === action.payload.id,
-        );
-        if (index !== -1) {
-          state.totalPrice =
-            +state.totalPrice.toFixed(2) -
-            +(state.items[index].price * state.items[index].quantity).toFixed(
-              2,
-            );
-          state.items.splice(index, 1);
-        }
-      }),
-    };
-  },
-  extraReducers(builder) {
-    builder.addCase(
-      loadFromLocalStorageCart.fulfilled,
-      (_state, action: PayloadAction<ShoppingCartType>) => {
-        return action.payload;
-      },
-    );
-  },
-});
+  reducers: (create) => ({
+    addNewItem: create.reducer<{ item: Product }>((state, action) => {
+      state.items.push({ ...action.payload.item, quantity: 1 });
+      syncCartTotals(state);
+    }),
+    addItem: create.reducer<{ id: number }>((state, action) => {
+      const item = state.items.find((cartItem) => cartItem.id === action.payload.id);
 
-export const saveInLocalStorageCart = createAsyncThunk(
-  `${shoppingCartSlice.name}/saveInLocalStorageCart`,
-  (_, { dispatch, rejectWithValue, getState }) => {
-    try {
-      const state = getState() as RootState;
-      localStorage.setItem(
-        "shopping-cart",
-        JSON.stringify(state.shoppingCartSlice),
+      if (!item || item.quantity >= item.stock) {
+        return;
+      }
+
+      item.quantity += 1;
+      syncCartTotals(state);
+    }),
+    deleteItem: create.reducer<{ id: number }>((state, action) => {
+      const itemIndex = state.items.findIndex(
+        (cartItem) => cartItem.id === action.payload.id,
       );
-    } catch (error) {
-      dispatch(setAppStatusAC({ status: "failed" }));
-      dispatch(setAppErrorAC({ error: error as string }));
-      return rejectWithValue(error);
-    }
-  },
-);
-export const loadFromLocalStorageCart = createAsyncThunk(
-  `${shoppingCartSlice.name}/loadFromLocalStorageCart`,
-  (_, { dispatch, rejectWithValue }) => {
-    try {
-      const state = localStorage.getItem("shopping-cart");
-      if (!state) {
-        return {
-          items: [],
-          totalPrice: 0,
-        };
+
+      if (itemIndex === -1) {
+        return;
       }
 
-      const parsed = JSON.parse(state) as ShoppingCartType;
-      if (
-        typeof parsed !== "object" ||
-        parsed === null ||
-        parsed.items.length === 0
-      ) {
-        localStorage.removeItem("shopping-cart");
+      state.items[itemIndex].quantity -= 1;
 
-        return {
-          items: [],
-          totalPrice: 0,
-        };
+      if (state.items[itemIndex].quantity <= 0) {
+        state.items.splice(itemIndex, 1);
       }
-      return parsed as ShoppingCartType;
-    } catch (error) {
-      dispatch(setAppStatusAC({ status: "failed" }));
-      dispatch(setAppErrorAC({ error: error as string }));
-      return rejectWithValue(error);
-    }
-  },
-);
+
+      syncCartTotals(state);
+    }),
+    fullDeleteItem: create.reducer<{ id: number }>((state, action) => {
+      const itemIndex = state.items.findIndex(
+        (cartItem) => cartItem.id === action.payload.id,
+      );
+
+      if (itemIndex === -1) {
+        return;
+      }
+
+      state.items.splice(itemIndex, 1);
+      syncCartTotals(state);
+    }),
+  }),
+});
 
 export const { addItem, addNewItem, deleteItem, fullDeleteItem } =
   shoppingCartSlice.actions;

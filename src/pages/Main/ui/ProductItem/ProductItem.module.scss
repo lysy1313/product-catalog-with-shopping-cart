@@ -8,7 +8,7 @@
   min-height: 420px;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px $boxShadowColor;
   background: $cartBgColor;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -16,11 +16,10 @@
   color: inherit;
 
   &:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 24px $boxShadowColor;
     transform: translateY(-2px);
   }
 
-  // Автоматическая адаптация под разные экраны
   @media (min-width: 1200px) {
     max-width: 300px;
     min-height: 450px;
@@ -55,7 +54,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f9fa;
+  background: $surfaceMutedColor;
   flex-shrink: 0;
 
   @media (max-width: 1200px) {
@@ -157,8 +156,8 @@
 }
 
 .badge {
-  background: #00b894;
-  color: white;
+  background: $successBgColor;
+  color: $successContrastColor;
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 11px;
@@ -166,7 +165,8 @@
   white-space: nowrap;
 
   &.red {
-    background: #b81500;
+    background: $dangerBgColor;
+    color: $dangerContrastColor;
   }
 
   @media (max-width: 768px) {
@@ -178,7 +178,7 @@
 .description {
   font-size: 13px;
   line-height: 1.5;
-  color: #636e72;
+  color: $textMutedColor;
   margin: 0;
   overflow: hidden;
 

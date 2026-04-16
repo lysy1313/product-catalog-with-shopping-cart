@@ -1,21 +1,69 @@
 :root {
-  --bg-color: #ffffff;
-  --text-color: #333333;
+  --bg-color: #f4f6fb;
+  --text-color: #1f2937;
+  --text-muted-color: #5f6b7a;
   --primary-color: #4361ee;
-  --box-shadow-color: rgba(0, 0, 0, 0.2);
+  --surface-color: #ffffff;
+  --surface-muted-color: #eef2f8;
+  --surface-overlay-color: rgba(255, 255, 255, 0.7);
+  --card-bg: #ffffff;
+  --border-color: #d7deea;
+  --box-shadow-color: rgba(15, 23, 42, 0.16);
+  --success-bg-color: #0f9f75;
+  --success-contrast-color: #ffffff;
+  --danger-bg-color: #c24141;
+  --danger-contrast-color: #ffffff;
+  --toast-success-bg-color: #0f9f75;
+  --toast-success-border-color: #0b7f5d;
+  --toast-error-bg-color: #c24141;
+  --toast-error-border-color: #9f2f2f;
+  --header-badge-bg-color: #d14343;
+  --header-badge-text-color: #ffffff;
+  --button-disabled-bg-color: #c7d0de;
 }
 
 :root.dark {
-  --bg-color: #242424;
-  --text-color: #f8f9fa;
-  --primary-color: #4cc9f0;
-  --box-shadow-color: rgba(255, 255, 255, 0.2);
+  --bg-color: #10141d;
+  --text-color: #f3f6fb;
+  --text-muted-color: #9ca8ba;
+  --primary-color: #7aa2ff;
+  --surface-color: #161d29;
+  --surface-muted-color: #202938;
+  --surface-overlay-color: rgba(32, 41, 56, 0.72);
+  --card-bg: #161d29;
+  --border-color: #2d3a4f;
+  --box-shadow-color: rgba(0, 0, 0, 0.32);
+  --success-bg-color: #17956f;
+  --success-contrast-color: #f3f6fb;
+  --danger-bg-color: #c65b5b;
+  --danger-contrast-color: #fdf2f2;
+  --toast-success-bg-color: #146f57;
+  --toast-success-border-color: #1db287;
+  --toast-error-bg-color: #8f3c3c;
+  --toast-error-border-color: #d86d6d;
+  --header-badge-bg-color: #ef6a6a;
+  --header-badge-text-color: #10141d;
+  --button-disabled-bg-color: #49576d;
 }
 
 $primaryColor: var(--primary-color);
 $textColor: var(--text-color);
+$textMutedColor: var(--text-muted-color);
 $bgcColor: var(--bg-color);
+$surfaceColor: var(--surface-color);
+$surfaceMutedColor: var(--surface-muted-color);
+$surfaceOverlayColor: var(--surface-overlay-color);
 $cartBgColor: var(--card-bg);
-
-$btnColor: var(--btn-color);
+$borderColor: var(--border-color);
 $boxShadowColor: var(--box-shadow-color);
+$successBgColor: var(--success-bg-color);
+$successContrastColor: var(--success-contrast-color);
+$dangerBgColor: var(--danger-bg-color);
+$dangerContrastColor: var(--danger-contrast-color);
+$toastSuccessBgColor: var(--toast-success-bg-color);
+$toastSuccessBorderColor: var(--toast-success-border-color);
+$toastErrorBgColor: var(--toast-error-bg-color);
+$toastErrorBorderColor: var(--toast-error-border-color);
+$headerBadgeBgColor: var(--header-badge-bg-color);
+$headerBadgeTextColor: var(--header-badge-text-color);
+$buttonDisabledBgColor: var(--button-disabled-bg-color);

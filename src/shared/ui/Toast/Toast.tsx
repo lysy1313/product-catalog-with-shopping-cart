@@ -1,6 +1,8 @@
 import {
+  selectError,
   selectStatus,
   selectToast,
+  setAppErrorAC,
   setAppStatusAC,
   setAppToast,
 } from "@/app/model/app-slice";
@@ -9,37 +11,53 @@ import React, { useEffect } from "react";
 import styles from "./Toast.module.scss";
 
 export const Toast: React.FC = () => {
-  const { isVisible, message } = useAppSelector(selectToast);
+  const { isVisible, message, version } = useAppSelector(selectToast);
   const status = useAppSelector(selectStatus);
+  const error = useAppSelector(selectError);
   const dispatch = useAppDispatch();
 
-  if (status === "failed") {
+  useEffect(() => {
+    if (status !== "failed") {
+      return;
+    }
+
     dispatch(
-      setAppToast({ isVisible: true, message: "The server is unavailable!" }),
+      setAppToast({
+        isVisible: true,
+        message: error ?? "The server is unavailable!",
+      }),
     );
-  }
+  }, [dispatch, error, status]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (!isVisible) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
       dispatch(setAppToast({ isVisible: false, message: "" }));
+
       if (status === "failed") {
         dispatch(setAppStatusAC({ status: "idle" }));
+        dispatch(setAppErrorAC({ error: null }));
       }
     }, 2000);
 
-    return () => clearTimeout(timer);
-  }, [isVisible]);
+    return () => window.clearTimeout(timer);
+  }, [dispatch, isVisible, status, version]);
 
-  if (isVisible === false) return null;
+  if (!isVisible) {
+    return null;
+  }
 
-  return status !== "failed" ? (
-    <div className={`${styles.toast} ${styles.success}`}>
-      <div className={styles.content}>
-        <span className={styles.message}>{message}</span>
-      </div>
-    </div>
-  ) : (
-    <div className={`${styles.toast} ${styles.error}`}>
+  const isErrorToast = status === "failed";
+
+  return (
+    <div
+      className={`${styles.toast} ${isErrorToast ? styles.error : styles.success}`}
+      role={isErrorToast ? "alert" : "status"}
+      aria-live={isErrorToast ? "assertive" : "polite"}
+    >
       <div className={styles.content}>
         <span className={styles.message}>{message}</span>
       </div>

@@ -4,6 +4,10 @@ import { AddButton } from "@/widgets/AddButton/ui/AddButton";
 import React, { useCallback } from "react";
 import { Link } from "react-router";
 import {
+  buildProductRoute,
+  routePaths,
+} from "@/app/providers/router/routes";
+import {
   fullDeleteItem,
   selectItemsInShoppingCart,
   selectTotalPrice,
@@ -24,27 +28,24 @@ export const ShoppingCart: React.FC = () => {
   );
 
   const isEmpty = shoppingCartItems.length === 0;
+  const checkoutButtonLabel = "Checkout coming soon";
 
   return isEmpty ? (
     <section>
       <Container>
-        <h2>ShoppingCart</h2>
+        <h2>Shopping cart</h2>
         <div className={styles.shoppingCart}>
           <div className={`${styles.checkoutAllCart} ${styles.emptyList}`}>
-            You haven't added any products yet! We suggest you return to the
-            catalog and do so!
-            <Link
-              to="/product-catalog-with-shopping-cart/catalog"
-              className={styles.link}
-            >
+            Your cart is empty. Browse the catalog to add something you like.
+            <Link to={routePaths.catalog} className={styles.link}>
               Back to catalog
             </Link>
           </div>
           <div className={styles.checkout}>
             <h5 className={styles.totalAmount}>
-              Total price: ${shoppingCartTotalPrice}
+              Total price: ${shoppingCartTotalPrice.toFixed(2)}
             </h5>
-            <Button onClick={() => {}}>To the design</Button>
+            <Button disabled>{checkoutButtonLabel}</Button>
           </div>
         </div>
       </Container>
@@ -52,13 +53,10 @@ export const ShoppingCart: React.FC = () => {
   ) : (
     <section>
       <Container>
-        <Link
-          to="/product-catalog-with-shopping-cart/catalog"
-          className={styles.link}
-        >
+        <Link to={routePaths.catalog} className={styles.link}>
           Back to catalog
         </Link>
-        <h2>ShoppingCart</h2>
+        <h2>Shopping cart</h2>
         <div className={styles.shoppingCart}>
           <div className={styles.checkoutAllCart}>
             {shoppingCartItems.map((item) => {
@@ -72,7 +70,7 @@ export const ShoppingCart: React.FC = () => {
                     />
                   </div>
                   <div className={styles.infoCart}>
-                    <Link to={`/catalog/${item.id}`}>
+                    <Link to={buildProductRoute(item.id)}>
                       <h2>{item.title}</h2>
                     </Link>
                     <p>{item.description}</p>
@@ -102,7 +100,7 @@ export const ShoppingCart: React.FC = () => {
             <h5 className={styles.totalAmount}>
               Total price: ${shoppingCartTotalPrice.toFixed(2)}
             </h5>
-            <Button onClick={() => {}}>To the design</Button>
+            <Button disabled>{checkoutButtonLabel}</Button>
           </div>
         </div>
       </Container>

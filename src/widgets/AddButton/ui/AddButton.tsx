@@ -18,16 +18,16 @@ type PropsType = {
 export const AddButton: React.FC<PropsType> = ({ product }) => {
   const shoppingCart = useAppSelector(selectItemsInShoppingCart);
 
-  const item = shoppingCart.find((el) => el.id === product.id);
+  const cartItem = shoppingCart.find((el) => el.id === product.id);
 
   const dispatch = useAppDispatch();
 
-  const addItemInShoppingCart = useCallback(
+  const handleAddToCart = useCallback(
     (e?: MouseEvent<HTMLButtonElement>) => {
       e?.stopPropagation();
       e?.preventDefault();
 
-      if (item) {
+      if (cartItem) {
         dispatch(addItem({ id: product.id }));
       } else {
         dispatch(addNewItem({ item: product }));
@@ -35,10 +35,10 @@ export const AddButton: React.FC<PropsType> = ({ product }) => {
 
       dispatch(setAppToast({ message: "Added to cart!", isVisible: true }));
     },
-    [dispatch, item, product],
+    [cartItem, dispatch, product],
   );
 
-  const deleteItemFromShoppingCart = useCallback(
+  const handleRemoveFromCart = useCallback(
     (e?: MouseEvent<HTMLButtonElement>) => {
       e?.stopPropagation();
       e?.preventDefault();
@@ -52,30 +52,32 @@ export const AddButton: React.FC<PropsType> = ({ product }) => {
     e.preventDefault();
   }, []);
 
-  return !item ? (
+  return !cartItem ? (
     <Button
-      onClick={addItemInShoppingCart}
+      onClick={handleAddToCart}
       disabled={product.stock === 0}
       className={styles.addButton}
     >
-      Add product in basket
+      Add to cart
     </Button>
   ) : (
     <div className={styles.boxAddBtn}>
       <Button
-        onClick={deleteItemFromShoppingCart}
-        disabled={item.quantity === 0}
+        onClick={handleRemoveFromCart}
+        disabled={cartItem.quantity === 0}
         className={styles.addButton}
+        aria-label={`Remove one ${product.title} from cart`}
       >
         -
       </Button>
       <span onClick={stopPropagation} className={styles.quantity}>
-        {item.quantity}
+        {cartItem.quantity}
       </span>
       <Button
-        onClick={addItemInShoppingCart}
-        disabled={item.quantity === item.stock}
+        onClick={handleAddToCart}
+        disabled={cartItem.quantity === cartItem.stock}
         className={styles.addButton}
+        aria-label={`Add one more ${product.title} to cart`}
       >
         +
       </Button>
