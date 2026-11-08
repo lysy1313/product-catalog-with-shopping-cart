@@ -1,25 +1,20 @@
-import { type MouseEvent, type ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import styles from "./Button.module.scss";
 
-type ButtonPropsType = {
+type ButtonPropsType = ComponentPropsWithoutRef<"button"> & {
   children: ReactNode;
-  disabled?: boolean;
-  onClick?: (e?: MouseEvent<HTMLButtonElement>) => void;
-  className?: string;
 };
 
 export const Button = ({
   children,
-  onClick,
-  disabled,
   className,
+  type = "button",
+  ...rest
 }: ButtonPropsType) => {
+  const buttonClassName = [styles.button, className].filter(Boolean).join(" ");
+
   return (
-    <button
-      className={className ? className : styles.button}
-      onClick={onClick}
-      disabled={disabled}
-    >
+    <button type={type} className={buttonClassName} {...rest}>
       {children}
     </button>
   );

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-
 import styles from "./Toolbar.module.scss";
 import {
   useAppDispatch,
@@ -9,17 +8,14 @@ import {
 import {
   changeCategory,
   changeSorting,
-  fetchProductsCategoriesTC,
   selectAvailableCategories,
   selectFilters,
   setSearch,
-} from "../../model/productsSlice";
-import type {
-  SortType,
-  UIFilterCategoryType,
-} from "../../model/productsSlice.types";
+  type SortType,
+  type UIFilterCategoryType,
+} from "@/entities/product";
 
-const allSort = [
+const allSort: SortType[] = [
   "Sort by",
   "Expensive",
   "Cheap",
@@ -36,12 +32,10 @@ export const ProductsToolbar: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchProductsCategoriesTC());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(setSearch({ search: debouncedSearch }));
-  }, [debouncedSearch, dispatch]);
+    if (debouncedSearch !== filters.search) {
+      dispatch(setSearch({ search: debouncedSearch }));
+    }
+  }, [debouncedSearch, dispatch, filters.search]);
 
   const handleCategoryChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {

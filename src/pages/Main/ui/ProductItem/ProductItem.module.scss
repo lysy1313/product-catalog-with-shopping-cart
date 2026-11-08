@@ -1,4 +1,4 @@
-@use "../../../../app/styles/variebles.scss" as *;
+@use "../../../../app/styles/variables.scss" as *;
 
 .cart {
   display: flex;
@@ -11,8 +11,6 @@
   box-shadow: 0 4px 12px $boxShadowColor;
   background: $cartBgColor;
   transition: all 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
   color: inherit;
 
   &:hover {
@@ -107,6 +105,11 @@
   }
 }
 
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
 .title {
   font-size: 16px;
   font-weight: 600;
@@ -193,5 +196,5 @@
 }
 
 .addButtonContainer {
-  margin: 0 auto;
+  margin: auto auto 0;
 }

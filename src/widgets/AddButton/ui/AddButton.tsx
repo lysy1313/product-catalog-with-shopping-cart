@@ -1,14 +1,14 @@
 import { setAppToast } from "@/app/model/app-slice";
-import type { Product } from "@/pages/Main/model/productsSlice.types";
 import {
   addItem,
   addNewItem,
   deleteItem,
   selectItemsInShoppingCart,
-} from "@/pages/ShoppingCart/model/shoppingCartSlice";
+} from "@/entities/cart";
+import type { Product } from "@/entities/product";
 import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks";
-import React, { useCallback, type MouseEvent } from "react";
-import { Button } from "../../../shared/ui/Button/Button";
+import { Button } from "@/shared/ui";
+import React, { useCallback } from "react";
 import styles from "./AddButton.module.scss";
 
 type PropsType = {
@@ -17,40 +17,22 @@ type PropsType = {
 
 export const AddButton: React.FC<PropsType> = ({ product }) => {
   const shoppingCart = useAppSelector(selectItemsInShoppingCart);
-
   const cartItem = shoppingCart.find((el) => el.id === product.id);
-
   const dispatch = useAppDispatch();
 
-  const handleAddToCart = useCallback(
-    (e?: MouseEvent<HTMLButtonElement>) => {
-      e?.stopPropagation();
-      e?.preventDefault();
+  const handleAddToCart = useCallback(() => {
+    if (cartItem) {
+      dispatch(addItem({ id: product.id }));
+    } else {
+      dispatch(addNewItem({ item: product }));
+    }
 
-      if (cartItem) {
-        dispatch(addItem({ id: product.id }));
-      } else {
-        dispatch(addNewItem({ item: product }));
-      }
+    dispatch(setAppToast({ message: "Added to cart!", isVisible: true }));
+  }, [cartItem, dispatch, product]);
 
-      dispatch(setAppToast({ message: "Added to cart!", isVisible: true }));
-    },
-    [cartItem, dispatch, product],
-  );
-
-  const handleRemoveFromCart = useCallback(
-    (e?: MouseEvent<HTMLButtonElement>) => {
-      e?.stopPropagation();
-      e?.preventDefault();
-      dispatch(deleteItem({ id: product.id }));
-    },
-    [dispatch, product.id],
-  );
-
-  const stopPropagation = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-  }, []);
+  const handleRemoveFromCart = useCallback(() => {
+    dispatch(deleteItem({ id: product.id }));
+  }, [dispatch, product.id]);
 
   return !cartItem ? (
     <Button
@@ -70,9 +52,7 @@ export const AddButton: React.FC<PropsType> = ({ product }) => {
       >
         -
       </Button>
-      <span onClick={stopPropagation} className={styles.quantity}>
-        {cartItem.quantity}
-      </span>
+      <span className={styles.quantity}>{cartItem.quantity}</span>
       <Button
         onClick={handleAddToCart}
         disabled={cartItem.quantity === cartItem.stock}

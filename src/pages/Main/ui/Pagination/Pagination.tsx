@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import styles from "./Pagination.module.scss";
 import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks";
-import { selectPagination, setPage } from "../../model/productsSlice";
+import { selectPagination, setPage } from "@/entities/product";
 
 export const Pagination: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -48,6 +48,7 @@ export const Pagination: React.FC = () => {
         {getPageNumbers.map((page) => (
           <button
             key={page}
+            type="button"
             className={`${styles.pageButton} ${currentPage === page ? styles.active : ""}`}
             onClick={() => handlePageChange(page)}
           >

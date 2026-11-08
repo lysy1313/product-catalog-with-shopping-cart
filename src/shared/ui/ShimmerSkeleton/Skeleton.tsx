@@ -1,4 +1,3 @@
-// src/components/Skeleton/Skeleton.tsx
 import React from "react";
 import styles from "./Skeleton.module.scss";
 import { useAppSelector } from "../../lib/hooks";
@@ -27,6 +26,6 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     <div
       className={`${themeMode === "light" ? styles.skeleton : styles.skeletonDark} ${className}`}
       style={inlineStyles}
-    ></div>
+    />
   );
 };

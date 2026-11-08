@@ -1,4 +1,4 @@
-import type { Product } from "@/pages/Main/model/productsSlice.types";
+import type { Product } from "@/entities/product";
 import { createSlice } from "@reduxjs/toolkit";
 
 export type ItemType = Product & { quantity: number };
@@ -113,7 +113,7 @@ export const saveShoppingCartToLocalStorage = (
       }),
     );
   } catch {
-    // Ignore write failures so cart interactions keep working.
+    return;
   }
 };
 

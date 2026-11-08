@@ -1,32 +1,54 @@
-## React + TypeScript + Vite + Redux + React-Router
+# Product Catalog & Shopping Cart
 
-Проект загружен на GH-pages.
+Single-page e-commerce catalog application built with React 19, TypeScript, Redux Toolkit, and React Router 7 following Feature-Sliced Design (FSD).
 
-Actions->pages build and deployment-> нажмите на ссылку
+## Key Features
 
-## Для запуска проекта
+- **Catalog Filtering & Sorting:** Filter products by category, sort by price or title, and search with a 500ms debounce.
+- **Client-Side Pagination:** Dynamic page range calculation with automatic page clamping when filters change.
+- **Persistent Shopping Cart:** Cart state persisted to `localStorage` with runtime schema validation via TypeScript type guards and stock limit enforcement.
+- **Theme Switching:** Light and dark themes powered by CSS custom properties, persisted to `localStorage` with automatic `prefers-color-scheme` fallback.
+- **Resilient UI:** Shimmer loading skeletons, accessible toast notifications (`aria-live`), and route-level error boundaries.
 
-### 1. Установите зависимости:
+## Tech Stack
+
+- **Frontend:** React 19, TypeScript 5.9, React Router 7
+- **State Management:** Redux Toolkit 2, React-Redux 9, Reselect (`createSelector`)
+- **Styling:** SCSS Modules, CSS Custom Properties
+- **Build & Tooling:** Vite 7, ESLint 9, Node.js Test Runner (`node:test`)
+
+## Architecture
+
+The project is organized according to **Feature-Sliced Design (FSD)**:
+
+- `src/app` — application initialization, global styles, router, and Redux store configuration
+- `src/pages` — route-level pages (`Main`, `Product`, `ShoppingCart`)
+- `src/widgets` — composite UI blocks (`Header`, `AddButton`, `ErrorBoundary`)
+- `src/entities` — business domain slices, API clients, and models (`product`, `cart`)
+- `src/shared` — reusable UI primitives (`Button`, `Container`, `Icon`, `Skeleton`, `Toast`), hooks, and static assets
+
+## Getting Started
+
+### 1. Install dependencies
 
 ```bash
-pnpm i
+pnpm install
 ```
 
-### 2. Запустите приложение:
+### 2. Start development server
 
 ```bash
 pnpm dev
 ```
 
-Откройте [http://localhost:5173](http://localhost:5173) в вашем браузере и наблюдайте за результатом.
+### 3. Run unit tests
 
-Использовал технологии:
+```bash
+pnpm test
+```
 
-- React - как главный иструмент, который предоставляет возможности формирования красивого дизайна, а также хорош для оптимизации прилложения;
-- TypeScript - главная охрана типизации проекта на языке JS;
-- Vite - сборщик который в нынешнее время лучше Webpack-а, в производительности, скорости сборки и в простоте конфигурации;
-- Redux - дабы избежать props dilling, то есть с помощью него есть одно хранилище которым мы можем пользоваться в каждой компоненте;
-- React-Router-библиотека для навигации React приложения, очень быстро переключает на нужную компненту;
-- CSS module - помогает решить проблему глобального пространства имён, а также поддерживается TypeScript-ом что упрощает рефакторинг;
-- SCSS - в данном проекте главные его плюсы которые использовались это переменные в которых заложены цвета и вложенность;
-- FSD - это архитектурная методолгоия с помощью которой я структурировал код.
+### 4. Build for production
+
+```bash
+pnpm build
+```

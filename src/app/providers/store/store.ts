@@ -1,13 +1,10 @@
 import { appReducer, appSlice } from "@/app/model/app-slice";
 import {
-  productsReducer,
-  productsSlice,
-} from "@/pages/Main/model/productsSlice";
-import {
-  shoppingCartReducer,
   saveShoppingCartToLocalStorage,
+  shoppingCartReducer,
   shoppingCartSlice,
-} from "@/pages/ShoppingCart/model/shoppingCartSlice";
+} from "@/entities/cart";
+import { productsReducer, productsSlice } from "@/entities/product";
 import { configureStore } from "@reduxjs/toolkit";
 
 export const store = configureStore({

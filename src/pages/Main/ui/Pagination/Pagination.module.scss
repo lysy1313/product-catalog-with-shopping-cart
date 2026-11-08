@@ -1,4 +1,4 @@
-@use "../../../../app/styles/variebles.scss" as *;
+@use "../../../../app/styles/variables.scss" as *;
 
 .pagination {
   display: flex;
@@ -29,9 +29,6 @@
     cursor: pointer;
     font-size: 14px;
     transition: all 0.2s;
-  }
-
-  .pageButton {
     min-width: 40px;
 
     &.active {

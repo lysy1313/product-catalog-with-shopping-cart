@@ -3,7 +3,6 @@ import {
   createSelector,
   createSlice,
 } from "@reduxjs/toolkit";
-import { setAppErrorAC, setAppStatusAC } from "../../../app/model/app-slice";
 import { normalizeFetchError, productsApi } from "../api/productsApi";
 import type {
   CategoryType,
@@ -46,20 +45,11 @@ export const fetchProductsTC = createAsyncThunk<
   ProductFromServer[],
   void,
   { rejectValue: string }
->("products/fetchProductsTC", async (_, { dispatch, rejectWithValue }) => {
-  dispatch(setAppStatusAC({ status: "loading" }));
-
+>("products/fetchProductsTC", async (_, { rejectWithValue }) => {
   try {
-    const response = await productsApi.getProducts();
-    dispatch(setAppStatusAC({ status: "succeeded" }));
-    return response;
+    return await productsApi.getProducts();
   } catch (error) {
-    const message = normalizeFetchError(error);
-
-    dispatch(setAppStatusAC({ status: "failed" }));
-    dispatch(setAppErrorAC({ error: message }));
-
-    return rejectWithValue(message);
+    return rejectWithValue(normalizeFetchError(error));
   }
 });
 
@@ -67,14 +57,11 @@ export const fetchProductsCategoriesTC = createAsyncThunk<
   CategoryType[],
   void,
   { rejectValue: string }
->("products/fetchProductsCategoriesTC", async (_, { dispatch, rejectWithValue }) => {
+>("products/fetchProductsCategoriesTC", async (_, { rejectWithValue }) => {
   try {
     return await productsApi.getProductsCategories();
   } catch (error) {
-    const message = normalizeFetchError(error);
-
-    dispatch(setAppErrorAC({ error: message }));
-    return rejectWithValue(message);
+    return rejectWithValue(normalizeFetchError(error));
   }
 });
 

@@ -8,7 +8,11 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": ".test-dist",
-    "rootDir": "src/pages/Main/model"
+    "rootDir": "src/entities/product/model"
   },
-  "include": ["src/pages/Main/model/products.utils.ts", "src/pages/Main/model/productsSlice.types.ts", "src/pages/Main/model/products.utils.test.ts"]
+  "include": [
+    "src/entities/product/model/products.utils.ts",
+    "src/entities/product/model/productsSlice.types.ts",
+    "src/entities/product/model/products.utils.test.ts"
+  ]
 }

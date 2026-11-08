@@ -1,11 +1,8 @@
 import { routePaths } from "@/app/providers/router/routes";
-import {
-  selectTotalQuantityItemInShoppingCart,
-} from "@/pages/ShoppingCart/model/shoppingCartSlice";
+import { selectTotalQuantityItemInShoppingCart } from "@/entities/cart";
 import { useAppSelector } from "@/shared/lib/hooks";
+import { Container, Icon } from "@/shared/ui";
 import { Link } from "react-router";
-import { Container } from "../../../shared/ui/Container/Container";
-import { Icon } from "../../../shared/ui/Icon/Icon";
 import styles from "./Header.module.scss";
 import { ThemeMode } from "./ThemeMode/ThemeMode";
 

@@ -1,3 +1,7 @@
+import {
+  fetchProductsCategoriesTC,
+  fetchProductsTC,
+} from "@/entities/product";
 import { createSlice } from "@reduxjs/toolkit";
 import type { RequestStatus, ThemeMode } from "../config/types";
 
@@ -54,7 +58,7 @@ export const persistThemeMode = (themeMode: ThemeMode) => {
   try {
     window.localStorage.setItem(THEME_STORAGE_KEY, themeMode);
   } catch {
-    // Ignore persistence failures so theme toggling still works.
+    return;
   }
 };
 
@@ -100,6 +104,29 @@ export const appSlice = createSlice({
       },
     ),
   }),
+  extraReducers(builder) {
+    builder
+      .addCase(fetchProductsTC.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchProductsTC.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
+      .addCase(fetchProductsTC.rejected, (state, action) => {
+        state.status = "failed";
+        state.error =
+          action.payload ??
+          action.error.message ??
+          "Unable to load products right now.";
+      })
+      .addCase(fetchProductsCategoriesTC.rejected, (state, action) => {
+        state.error =
+          action.payload ??
+          action.error.message ??
+          "Unable to load categories right now.";
+      });
+  },
 });
 
 export const { changeThemeModeAC, setAppStatusAC, setAppErrorAC, setAppToast } =

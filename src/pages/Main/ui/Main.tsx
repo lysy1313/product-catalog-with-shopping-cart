@@ -1,17 +1,16 @@
-import { selectStatus } from "../../../app/model/app-slice";
-
-import styles from "./Main.module.scss";
-import { Pagination } from "./Pagination/Pagination";
-import { ProductItem } from "./ProductItem/ProductItem";
-import { ProductsToolbar } from "./ProductsToolbar/ProductsToolbar";
-import { useAppSelector } from "@/shared/lib/hooks";
+import { selectStatus } from "@/app/model/app-slice";
 import {
   selectAllProducts,
   selectFilters,
   selectProducts,
   selectTotalItems,
-} from "../model/productsSlice";
+} from "@/entities/product";
+import { useAppSelector } from "@/shared/lib/hooks";
 import { Container, Skeleton } from "@/shared/ui";
+import styles from "./Main.module.scss";
+import { Pagination } from "./Pagination/Pagination";
+import { ProductItem } from "./ProductItem/ProductItem";
+import { ProductsToolbar } from "./ProductsToolbar/ProductsToolbar";
 
 export const Main: React.FC = () => {
   const visibleProducts = useAppSelector(selectProducts);

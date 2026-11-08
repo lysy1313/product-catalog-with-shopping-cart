@@ -1,4 +1,4 @@
-@use "../../../../app/styles/variebles.scss" as *;
+@use "../../../../app/styles/variables.scss" as *;
 
 .toolbar {
   width: 100%;
@@ -59,7 +59,6 @@
   }
 }
 
-/* Для экранов шириной менее 400px */
 @media (max-width: 400px) {
   .toolbar {
     padding: 8px 0;
@@ -74,7 +73,6 @@
   }
 }
 
-/* Для очень маленьких экранов */
 @media (max-width: 320px) {
   .search,
   .select {
@@ -83,7 +81,6 @@
   }
 }
 
-/* Поддержка landscape режима на мобильных */
 @media (max-height: 500px) and (orientation: landscape) {
   .toolbar {
     padding: 8px 0;

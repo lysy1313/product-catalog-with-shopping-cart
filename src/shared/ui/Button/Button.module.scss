@@ -1,4 +1,4 @@
-@use "../../../app/styles/variebles.scss" as *;
+@use "../../../app/styles/variables.scss" as *;
 
 .button {
   padding: 5px;
@@ -13,6 +13,7 @@
     border: 1px solid $textColor;
     transform: scale(1.05);
   }
+
   &:disabled {
     opacity: 0.5;
     transform: scale(1);

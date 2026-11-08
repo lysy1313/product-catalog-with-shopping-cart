@@ -1,8 +1,3 @@
-import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks";
-import { Button, Container, Icon } from "@/shared/ui";
-import { AddButton } from "@/widgets/AddButton/ui/AddButton";
-import React, { useCallback } from "react";
-import { Link } from "react-router";
 import {
   buildProductRoute,
   routePaths,
@@ -11,7 +6,12 @@ import {
   fullDeleteItem,
   selectItemsInShoppingCart,
   selectTotalPrice,
-} from "../model/shoppingCartSlice";
+} from "@/entities/cart";
+import { useAppDispatch, useAppSelector } from "@/shared/lib/hooks";
+import { Button, Container, Icon } from "@/shared/ui";
+import { AddButton } from "@/widgets/AddButton/ui/AddButton";
+import React, { useCallback } from "react";
+import { Link } from "react-router";
 import styles from "./ShoppingCart.module.scss";
 
 export const ShoppingCart: React.FC = () => {
@@ -80,6 +80,7 @@ export const ShoppingCart: React.FC = () => {
                     <AddButton product={item} />
                   </div>
                   <Button
+                    aria-label={`Remove ${item.title} from cart`}
                     onClick={() => {
                       deleteItemFromShoppingCart(item.id);
                     }}

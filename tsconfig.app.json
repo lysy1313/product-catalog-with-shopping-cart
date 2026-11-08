@@ -7,6 +7,7 @@
       "@/pages/*": ["src/pages/*"],
       "@/widgets/*": ["src/widgets/*"],
       "@/features/*": ["src/features/*"],
+      "@/entities/*": ["src/entities/*"],
       "@/shared/*": ["src/shared/*"]
     },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
@@ -16,16 +17,12 @@
     "module": "ESNext",
     "types": ["vite/client"],
     "skipLibCheck": true,
-
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

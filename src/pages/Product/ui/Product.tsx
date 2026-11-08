@@ -1,6 +1,6 @@
 import { selectError, selectStatus } from "@/app/model/app-slice";
 import { routePaths } from "@/app/providers/router/routes";
-import { selectAllProducts } from "@/pages/Main/model/productsSlice";
+import { selectAllProducts } from "@/entities/product";
 import { useAppSelector } from "@/shared/lib/hooks";
 import { Container } from "@/shared/ui";
 import { AddButton } from "@/widgets/AddButton/ui/AddButton";
