@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Select.module.scss";
 
 export type SelectOption<T extends string = string> = {
@@ -26,11 +26,15 @@ export const Select = <T extends string = string>({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const selectedOption = options.find((opt) => opt.value === value) || options[0];
+  const selectedOption =
+    options.find((opt) => opt.value === value) || options[0];
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
