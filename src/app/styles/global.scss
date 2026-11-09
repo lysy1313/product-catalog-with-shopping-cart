@@ -16,11 +16,31 @@ body {
     color 0.2s ease;
 }
 
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-button {
+  display: none !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.4);
+  border-radius: 999px;
+}
+
 svg {
   background-color: transparent;
   fill: $textColor;
 }
 
 section {
-  margin-top: 100px;
+  margin-top: 80px;
 }

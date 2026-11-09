@@ -1,37 +1,48 @@
 @use "../../../app/styles/variables.scss" as *;
 
 .boxAddBtn {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-  align-items: baseline;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: $surfaceMutedColor;
+  border-radius: 8px;
+  padding: 4px;
 }
 
-.addButton {
-  margin-top: 30px;
-  padding: 15px 20px;
-  background: $bgcColor;
+.counterBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid $borderColor;
+  background: $surfaceColor;
   color: $textColor;
-  border: none;
-  border-radius: 10px;
   font-size: 16px;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 20px $boxShadowColor;
+  padding: 0;
 
   &:hover:not(:disabled) {
-    box-shadow: 0 10px 25px $boxShadowColor;
+    background: $primaryColor;
+    color: #fff;
+    border-color: $primaryColor;
   }
 
   &:disabled {
-    background: $buttonDisabledBgColor;
+    opacity: 0.4;
     cursor: not-allowed;
-    box-shadow: none;
   }
 }
 
 .quantity {
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 20px;
+  text-align: center;
   color: $textColor;
+}
+
+.addButton {
+  width: 100%;
 }

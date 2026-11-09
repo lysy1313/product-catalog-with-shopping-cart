@@ -6,6 +6,8 @@ export type ItemType = Product & { quantity: number };
 export type ShoppingCartType = {
   items: ItemType[];
   totalPrice: number;
+  totalDiscount: number;
+  rawSubtotal: number;
 };
 
 const SHOPPING_CART_STORAGE_KEY = "shopping-cart";
@@ -13,6 +15,8 @@ const SHOPPING_CART_STORAGE_KEY = "shopping-cart";
 const emptyCartState = (): ShoppingCartType => ({
   items: [],
   totalPrice: 0,
+  totalDiscount: 0,
+  rawSubtotal: 0,
 });
 
 const roundCurrency = (value: number) => Number(value.toFixed(2));
@@ -23,12 +27,6 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const isFiniteNumber = (value: unknown): value is number =>
   typeof value === "number" && Number.isFinite(value);
 
-const isValidRating = (value: unknown): value is Product["rating"] =>
-  isRecord(value) &&
-  isFiniteNumber(value.rate) &&
-  isFiniteNumber(value.count) &&
-  value.count >= 0;
-
 const isValidCartItem = (value: unknown): value is ItemType =>
   isRecord(value) &&
   isFiniteNumber(value.id) &&
@@ -36,20 +34,33 @@ const isValidCartItem = (value: unknown): value is ItemType =>
   isFiniteNumber(value.price) &&
   typeof value.description === "string" &&
   typeof value.category === "string" &&
-  typeof value.image === "string" &&
-  isValidRating(value.rating) &&
+  typeof value.thumbnail === "string" &&
   isFiniteNumber(value.stock) &&
-  Number.isInteger(value.stock) &&
   value.stock >= 0 &&
   isFiniteNumber(value.quantity) &&
-  Number.isInteger(value.quantity) &&
   value.quantity > 0 &&
   value.quantity <= Math.max(value.stock, 1);
 
-const calculateTotalPrice = (items: ItemType[]) =>
-  roundCurrency(
-    items.reduce((total, item) => total + item.price * item.quantity, 0),
-  );
+const calculateTotals = (items: ItemType[]) => {
+  let subtotal = 0;
+  let totalPrice = 0;
+
+  for (const item of items) {
+    const original = item.originalPrice || item.price;
+    subtotal += original * item.quantity;
+    totalPrice += item.price * item.quantity;
+  }
+
+  const rawSubtotal = roundCurrency(subtotal);
+  const finalPrice = roundCurrency(totalPrice);
+  const totalDiscount = roundCurrency(Math.max(0, rawSubtotal - finalPrice));
+
+  return {
+    rawSubtotal,
+    totalPrice: finalPrice,
+    totalDiscount,
+  };
+};
 
 const sanitizeCartState = (value: unknown): ShoppingCartType => {
   if (!isRecord(value) || !Array.isArray(value.items)) {
@@ -57,10 +68,11 @@ const sanitizeCartState = (value: unknown): ShoppingCartType => {
   }
 
   const items = value.items.filter(isValidCartItem);
+  const totals = calculateTotals(items);
 
   return {
     items,
-    totalPrice: calculateTotalPrice(items),
+    ...totals,
   };
 };
 
@@ -70,47 +82,30 @@ const loadShoppingCartFromLocalStorage = (): ShoppingCartType => {
   }
 
   try {
-    const persistedCart = window.localStorage.getItem(
-      SHOPPING_CART_STORAGE_KEY,
-    );
-
-    if (!persistedCart) {
-      return emptyCartState();
-    }
-
-    const sanitizedCart = sanitizeCartState(JSON.parse(persistedCart));
-
-    if (sanitizedCart.items.length === 0) {
+    const persisted = window.localStorage.getItem(SHOPPING_CART_STORAGE_KEY);
+    if (!persisted) return emptyCartState();
+    const sanitized = sanitizeCartState(JSON.parse(persisted));
+    if (sanitized.items.length === 0) {
       window.localStorage.removeItem(SHOPPING_CART_STORAGE_KEY);
       return emptyCartState();
     }
-
-    return sanitizedCart;
+    return sanitized;
   } catch {
     window.localStorage.removeItem(SHOPPING_CART_STORAGE_KEY);
     return emptyCartState();
   }
 };
 
-export const saveShoppingCartToLocalStorage = (
-  shoppingCart: ShoppingCartType,
-) => {
-  if (typeof window === "undefined") {
-    return;
-  }
-
+export const saveShoppingCartToLocalStorage = (cart: ShoppingCartType) => {
+  if (typeof window === "undefined") return;
   try {
-    if (shoppingCart.items.length === 0) {
+    if (cart.items.length === 0) {
       window.localStorage.removeItem(SHOPPING_CART_STORAGE_KEY);
       return;
     }
-
     window.localStorage.setItem(
       SHOPPING_CART_STORAGE_KEY,
-      JSON.stringify({
-        items: shoppingCart.items,
-        totalPrice: calculateTotalPrice(shoppingCart.items),
-      }),
+      JSON.stringify(cart),
     );
   } catch {
     return;
@@ -118,7 +113,10 @@ export const saveShoppingCartToLocalStorage = (
 };
 
 const syncCartTotals = (state: ShoppingCartType) => {
-  state.totalPrice = calculateTotalPrice(state.items);
+  const totals = calculateTotals(state.items);
+  state.rawSubtotal = totals.rawSubtotal;
+  state.totalPrice = totals.totalPrice;
+  state.totalDiscount = totals.totalDiscount;
 };
 
 export const shoppingCartSlice = createSlice({
@@ -127,6 +125,8 @@ export const shoppingCartSlice = createSlice({
   selectors: {
     selectItemsInShoppingCart: (state) => state.items,
     selectTotalPrice: (state) => state.totalPrice,
+    selectTotalDiscount: (state) => state.totalDiscount,
+    selectRawSubtotal: (state) => state.rawSubtotal,
     selectTotalQuantityItemInShoppingCart: (state) =>
       state.items.reduce((total, item) => total + item.quantity, 0),
   },
@@ -136,52 +136,42 @@ export const shoppingCartSlice = createSlice({
       syncCartTotals(state);
     }),
     addItem: create.reducer<{ id: number }>((state, action) => {
-      const item = state.items.find((cartItem) => cartItem.id === action.payload.id);
-
-      if (!item || item.quantity >= item.stock) {
-        return;
-      }
-
+      const item = state.items.find((el) => el.id === action.payload.id);
+      if (!item || item.quantity >= item.stock) return;
       item.quantity += 1;
       syncCartTotals(state);
     }),
     deleteItem: create.reducer<{ id: number }>((state, action) => {
-      const itemIndex = state.items.findIndex(
-        (cartItem) => cartItem.id === action.payload.id,
-      );
-
-      if (itemIndex === -1) {
-        return;
+      const index = state.items.findIndex((el) => el.id === action.payload.id);
+      if (index === -1) return;
+      state.items[index].quantity -= 1;
+      if (state.items[index].quantity <= 0) {
+        state.items.splice(index, 1);
       }
-
-      state.items[itemIndex].quantity -= 1;
-
-      if (state.items[itemIndex].quantity <= 0) {
-        state.items.splice(itemIndex, 1);
-      }
-
       syncCartTotals(state);
     }),
     fullDeleteItem: create.reducer<{ id: number }>((state, action) => {
-      const itemIndex = state.items.findIndex(
-        (cartItem) => cartItem.id === action.payload.id,
-      );
-
-      if (itemIndex === -1) {
-        return;
-      }
-
-      state.items.splice(itemIndex, 1);
+      const index = state.items.findIndex((el) => el.id === action.payload.id);
+      if (index === -1) return;
+      state.items.splice(index, 1);
+      syncCartTotals(state);
+    }),
+    clearCart: create.reducer((state) => {
+      state.items = [];
       syncCartTotals(state);
     }),
   }),
 });
 
-export const { addItem, addNewItem, deleteItem, fullDeleteItem } =
+export const { addItem, addNewItem, clearCart, deleteItem, fullDeleteItem } =
   shoppingCartSlice.actions;
+
 export const {
   selectItemsInShoppingCart,
+  selectRawSubtotal,
+  selectTotalDiscount,
   selectTotalPrice,
   selectTotalQuantityItemInShoppingCart,
 } = shoppingCartSlice.selectors;
+
 export const shoppingCartReducer = shoppingCartSlice.reducer;

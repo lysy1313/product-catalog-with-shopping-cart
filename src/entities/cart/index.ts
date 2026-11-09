@@ -1,10 +1,13 @@
 export {
   addItem,
   addNewItem,
+  clearCart,
   deleteItem,
   fullDeleteItem,
   saveShoppingCartToLocalStorage,
   selectItemsInShoppingCart,
+  selectRawSubtotal,
+  selectTotalDiscount,
   selectTotalPrice,
   selectTotalQuantityItemInShoppingCart,
   shoppingCartReducer,

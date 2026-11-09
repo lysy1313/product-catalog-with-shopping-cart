@@ -3,46 +3,47 @@
 .themeMode {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 0;
-  margin: 0 10px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+  padding: 3px;
+  background-color: $surfaceMutedColor;
+  border: 1px solid $borderColor;
   border-radius: 999px;
+  cursor: pointer;
+  gap: 2px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: $textMutedColor;
+  }
 
   &:focus-visible {
     outline: 2px solid $primaryColor;
-    outline-offset: 4px;
+    outline-offset: 2px;
   }
 }
 
-.track {
-  width: 44px;
+.iconSlot {
+  width: 24px;
   height: 24px;
-  border-radius: 999px;
-  background-color: $surfaceMutedColor;
-  border: 1px solid $borderColor;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  padding: 2px;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.thumb {
-  width: 18px;
-  height: 18px;
+  justify-content: center;
   border-radius: 50%;
-  background-color: $textColor;
-  box-shadow: 0 4px 10px $boxShadowColor;
-  transition:
-    transform 0.2s ease,
-    background-color 0.2s ease;
+  color: $textMutedColor;
+  transition: all 0.2s ease;
+
+  &.active {
+    background-color: $surfaceColor;
+    color: $textColor;
+    box-shadow: 0 1px 3px $boxShadowColor;
+  }
 }
 
-.thumbLight {
-  transform: translateX(20px);
-  background-color: $primaryColor;
+.icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }

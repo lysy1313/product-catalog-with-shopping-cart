@@ -1,0 +1,176 @@
+@use "../../../../app/styles/variables.scss" as *;
+
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: $surfaceColor;
+  border: 1px solid $borderColor;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px $boxShadowColor;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modalDialog {
+  background: $surfaceColor;
+  border: 1px solid $borderColor;
+  border-radius: 18px;
+  max-width: 440px;
+  width: 100%;
+  max-height: calc(100vh - 40px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: scaleUp 0.2s ease-out;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid $borderColor;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $textColor;
+  margin: 0;
+}
+
+.modalActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: $textMutedColor;
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+
+  &:hover {
+    color: $textColor;
+  }
+}
+
+.resetBtn {
+  background: none;
+  border: none;
+  color: $primaryColor;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.modalBody {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: $textColor;
+  margin: 0;
+}
+
+.priceRangeFields {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+
+  .divider {
+    color: $textMutedColor;
+    padding-bottom: 10px;
+    font-weight: 600;
+  }
+}
+
+.priceFieldBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .fieldLabel {
+    font-size: 11px;
+    font-weight: 700;
+    color: $textMutedColor;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.checkList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+}
+
+.modalFooter {
+  padding: 14px 20px 18px;
+  border-top: 1px solid $borderColor;
+  flex-shrink: 0;
+  background: $surfaceColor;
+}
+
+.modalApplyBtn {
+  width: 100%;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

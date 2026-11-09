@@ -26,7 +26,6 @@ export const AddButton: React.FC<PropsType> = ({ product }) => {
     } else {
       dispatch(addNewItem({ item: product }));
     }
-
     dispatch(setAppToast({ message: "Added to cart!", isVisible: true }));
   }, [cartItem, dispatch, product]);
 
@@ -34,33 +33,39 @@ export const AddButton: React.FC<PropsType> = ({ product }) => {
     dispatch(deleteItem({ id: product.id }));
   }, [dispatch, product.id]);
 
-  return !cartItem ? (
-    <Button
-      onClick={handleAddToCart}
-      disabled={product.stock === 0}
-      className={styles.addButton}
-    >
-      Add to cart
-    </Button>
-  ) : (
-    <div className={styles.boxAddBtn}>
-      <Button
-        onClick={handleRemoveFromCart}
-        disabled={cartItem.quantity === 0}
-        className={styles.addButton}
-        aria-label={`Remove one ${product.title} from cart`}
-      >
-        -
-      </Button>
-      <span className={styles.quantity}>{cartItem.quantity}</span>
+  if (!cartItem) {
+    return (
       <Button
         onClick={handleAddToCart}
-        disabled={cartItem.quantity === cartItem.stock}
+        disabled={product.stock === 0}
         className={styles.addButton}
+      >
+        Add to Bag
+      </Button>
+    );
+  }
+
+  return (
+    <div className={styles.boxAddBtn}>
+      <button
+        type="button"
+        onClick={handleRemoveFromCart}
+        disabled={cartItem.quantity === 0}
+        className={styles.counterBtn}
+        aria-label={`Remove one ${product.title} from cart`}
+      >
+        −
+      </button>
+      <span className={styles.quantity}>{cartItem.quantity}</span>
+      <button
+        type="button"
+        onClick={handleAddToCart}
+        disabled={cartItem.quantity >= product.stock}
+        className={styles.counterBtn}
         aria-label={`Add one more ${product.title} to cart`}
       >
         +
-      </Button>
+      </button>
     </div>
   );
 };

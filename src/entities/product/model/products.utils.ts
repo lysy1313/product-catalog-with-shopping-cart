@@ -7,49 +7,86 @@ import type {
   SortType,
 } from "./productsSlice.types.js";
 
-export const getDeterministicStock = (productId: number) => (productId * 3) % 11;
+export const calculateOriginalPrice = (
+  price: number,
+  discountPercentage: number,
+): number => {
+  if (discountPercentage <= 0 || discountPercentage >= 100) {
+    return price;
+  }
+  const original = price / (1 - discountPercentage / 100);
+  return Number(original.toFixed(2));
+};
 
-export const mapProductFromServer = (product: ProductFromServer): Product => ({
-  ...product,
-  stock: getDeterministicStock(product.id),
+export const mapProductFromServer = (item: ProductFromServer): Product => ({
+  ...item,
+  brand: item.brand || "Generic",
+  originalPrice: calculateOriginalPrice(item.price, item.discountPercentage || 0),
 });
 
-export const sortProducts = (products: Product[], sortBy: SortType) => {
-  const sortedProducts = [...products];
+export const sortProducts = (products: Product[], sortBy: SortType): Product[] => {
+  const sorted = [...products];
 
-  sortedProducts.sort((a, b) => {
+  sorted.sort((a, b) => {
     switch (sortBy) {
-      case "Expensive":
+      case "Price: High to Low":
         return b.price - a.price;
-      case "Cheap":
+      case "Price: Low to High":
         return a.price - b.price;
+      case "Highest Rated":
+        return b.rating - a.rating;
       case "Name A-Z":
         return a.title.localeCompare(b.title);
       case "Name Z-A":
         return b.title.localeCompare(a.title);
+      case "Featured":
       default:
-        return 0;
+        return a.id - b.id;
     }
   });
 
-  return sortedProducts;
+  return sorted;
 };
 
-export const filterProducts = (allProducts: Product[], filters: FiltersType) => {
-  const productsByCategory =
-    filters.category === "All"
-      ? allProducts
-      : allProducts.filter((product) => product.category === filters.category);
-
+export const filterProducts = (
+  allProducts: Product[],
+  filters: FiltersType,
+): Product[] => {
   const normalizedSearch = filters.search.trim().toLowerCase();
 
-  const productsBySearch = normalizedSearch
-    ? productsByCategory.filter((product) =>
-        product.title.toLowerCase().includes(normalizedSearch),
-      )
-    : productsByCategory;
+  const filtered = allProducts.filter((product) => {
+    if (filters.category !== "All" && product.category !== filters.category) {
+      return false;
+    }
 
-  return sortProducts(productsBySearch, filters.sort);
+    if (normalizedSearch) {
+      const titleMatch = product.title.toLowerCase().includes(normalizedSearch);
+      const brandMatch = (product.brand || "").toLowerCase().includes(normalizedSearch);
+      const categoryMatch = product.category.toLowerCase().includes(normalizedSearch);
+      if (!titleMatch && !brandMatch && !categoryMatch) {
+        return false;
+      }
+    }
+
+    if (filters.minPrice > 0 && product.price < filters.minPrice) {
+      return false;
+    }
+    if (filters.maxPrice > 0 && product.price > filters.maxPrice) {
+      return false;
+    }
+
+    if (filters.minRating > 0 && product.rating < filters.minRating) {
+      return false;
+    }
+
+    if (filters.brands.length > 0 && (!product.brand || !filters.brands.includes(product.brand))) {
+      return false;
+    }
+
+    return true;
+  });
+
+  return sortProducts(filtered, filters.sort);
 };
 
 export const getPaginationData = (

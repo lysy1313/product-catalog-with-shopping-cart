@@ -1,143 +1,221 @@
 @use "../../../app/styles/variables.scss" as *;
 
-.link {
+.section {
+  padding: 40px 0 80px;
+}
+
+.backLink {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-left: 20px;
-  margin-bottom: 30px;
-  padding: 12px 24px;
+  margin-bottom: 24px;
   color: $textColor;
+  font-size: 14px;
+  font-weight: 600;
   text-decoration: none;
-  font-weight: 500;
-  background: $cartBgColor;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px $boxShadowColor;
-  transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 6px 20px $boxShadowColor;
-    background: $surfaceOverlayColor;
-  }
-
-  &::before {
-    content: "←";
-    font-size: 18px;
+    color: $primaryColor;
   }
 }
 
-.shoppingCart {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 20px;
-  box-shadow: 0 10px 20px $boxShadowColor;
+.pageTitle {
+  font-size: 28px;
+  font-weight: 800;
+  color: $textColor;
+  margin-bottom: 24px;
 }
 
-.checkoutAllCart {
-  max-width: 900px;
-  width: 100%;
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 32px;
+  align-items: flex-start;
 
-  & :not(:first-child) {
-    margin-top: 10px;
-  }
-
-  &.emptyList {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
   }
 }
 
-.cart {
-  width: 100%;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  border-radius: 12px;
-  position: relative;
-  background: $cartBgColor;
-  box-shadow: 0 10px 20px $boxShadowColor;
-}
-
-.cartImage {
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-}
-
-.infoCart {
-  flex: 1;
-}
-
-.infoPrice {
+.itemsList {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
+  gap: 16px;
 }
 
-.checkout {
-  width: 250px;
-  height: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 20px;
-  border-radius: 12px;
-  padding: 10px;
+.emptyCard {
   background: $surfaceColor;
-  box-shadow: 0 0 20px $boxShadowColor;
   border: 1px solid $borderColor;
+  border-radius: 16px;
+  padding: 60px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: $textMutedColor;
 }
 
-.totalAmount {
-  font-size: 20px;
+.itemCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: $surfaceColor;
+  border: 1px solid $borderColor;
+  border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px $boxShadowColor;
+  position: relative;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.itemImage {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  background: $surfaceMutedColor;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.itemInfo {
+  flex: 1;
+
+  .itemTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: $textColor;
+    text-decoration: none;
+    margin-bottom: 4px;
+    display: inline-block;
+
+    &:hover {
+      color: $primaryColor;
+    }
+  }
+
+  .itemCategory {
+    font-size: 12px;
+    color: $textMutedColor;
+    text-transform: capitalize;
+  }
+}
+
+.itemControls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.itemPrice {
+  font-size: 18px;
+  font-weight: 800;
+  color: $textColor;
 }
 
 .deleteBtn {
-  position: absolute;
-  background-color: transparent;
+  background: none;
   border: none;
-  top: 0;
-  right: 10px;
+  color: $textMutedColor;
   cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  & :hover {
-    fill: $textMutedColor;
+  &:hover {
+    color: $dangerBgColor;
   }
 }
 
-@media (max-width: 1264px) {
-  .checkoutAllCart {
-    max-width: 1264px;
+.summaryCard {
+  background: $surfaceColor;
+  border: 1px solid $borderColor;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px $boxShadowColor;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summaryTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $borderColor;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: $textMutedColor;
+
+  &.discount {
+    color: $successBgColor;
+    font-weight: 600;
   }
 
-  .checkout {
-    width: 100%;
+  &.total {
+    font-size: 18px;
+    font-weight: 800;
+    color: $textColor;
+    padding-top: 12px;
+    border-top: 1px solid $borderColor;
   }
 }
 
-@media (max-width: 768px) {
-  .cart {
-    flex-wrap: wrap;
+.checkoutBtn {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modalContent {
+  background: $surfaceColor;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  h3 {
+    margin: 0;
+    font-size: 22px;
   }
 
-  .boxImage {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-
-  .infoPrice {
-    justify-content: center;
-    width: 100%;
-    text-align: center;
+  p {
+    margin: 0;
+    color: $textMutedColor;
+    line-height: 1.5;
   }
 }

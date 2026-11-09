@@ -1,50 +1,31 @@
 import { selectStatus } from "@/app/model/app-slice";
 import {
   selectAllProducts,
-  selectFilters,
   selectProducts,
   selectTotalItems,
 } from "@/entities/product";
 import { useAppSelector } from "@/shared/lib/hooks";
 import { Container, Skeleton } from "@/shared/ui";
+import React, { useState } from "react";
 import styles from "./Main.module.scss";
 import { Pagination } from "./Pagination/Pagination";
 import { ProductItem } from "./ProductItem/ProductItem";
 import { ProductsToolbar } from "./ProductsToolbar/ProductsToolbar";
+import { SidebarFilter } from "./SidebarFilter/SidebarFilter";
 
 export const Main: React.FC = () => {
   const visibleProducts = useAppSelector(selectProducts);
   const allProducts = useAppSelector(selectAllProducts);
   const status = useAppSelector(selectStatus);
-  const filters = useAppSelector(selectFilters);
   const totalItems = useAppSelector(selectTotalItems);
 
-  if (status === "loading") {
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+  if (status === "loading" && allProducts.length === 0) {
     return (
       <main className={styles.main}>
         <Container>
-          <ProductsToolbar />
-          <Skeleton />
-        </Container>
-      </main>
-    );
-  }
-
-  if (visibleProducts.length === 0) {
-    const emptyMessage =
-      allProducts.length === 0
-        ? "No products available right now."
-        : `No products match your current filters${
-            filters.search ? ` for "${filters.search}"` : ""
-          }.`;
-
-    return (
-      <main className={styles.main}>
-        <Container>
-          <ProductsToolbar />
-          <div style={{ textAlign: "center", margin: "40vh auto" }}>
-            {emptyMessage}
-          </div>
+          <Skeleton height="70vh" borderRadius="16px" />
         </Container>
       </main>
     );
@@ -53,13 +34,27 @@ export const Main: React.FC = () => {
   return (
     <main className={styles.main}>
       <Container>
-        <ProductsToolbar />
-        <div className={styles.wrapper}>
-          {visibleProducts.map((el) => {
-            return <ProductItem key={el.id} item={el} />;
-          })}
+        <ProductsToolbar onOpenMobileFilters={() => setIsFilterModalOpen(true)} />
+        <div className={styles.layout}>
+          <SidebarFilter
+            isModalOpen={isFilterModalOpen}
+            onCloseModal={() => setIsFilterModalOpen(false)}
+          />
+          <div className={styles.content}>
+            {visibleProducts.length === 0 ? (
+              <div className={styles.emptyState}>
+                No products match your current filters. Try resetting search or price range.
+              </div>
+            ) : (
+              <div className={styles.grid}>
+                {visibleProducts.map((item) => (
+                  <ProductItem key={item.id} item={item} />
+                ))}
+              </div>
+            )}
+            {totalItems > 0 && <Pagination />}
+          </div>
         </div>
-        {totalItems > 0 && <Pagination />}
       </Container>
     </main>
   );
